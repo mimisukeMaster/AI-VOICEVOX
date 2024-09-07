@@ -1,12 +1,15 @@
 const askButton = document.getElementById("askButton");
 const inputText = document.getElementById("inputText");
-const outputText = document.getElementById("outputText");
+const outputTextL = document.getElementById("outputTextL");
+const outputTextR = document.getElementById("outputTextR");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 
-askButton.addEventListener("click", askButtonClicked);
+askButton.addEventListener("click", () => {
+    askButtonClicked(inputText.value);
+});
 
-async function askButtonClicked() {
+async function askButtonClicked(input) {
     
     try{
         // ローディング表示
@@ -16,21 +19,21 @@ async function askButtonClicked() {
 
         // バックへPOSTメッセージを送る
         // POSTメッセージは質問文を送るのでstring型を指定する
-        const geminiRes = await fetch('api/gemini', {
+        const geminiRes = await fetch('../api/gemini', {
             method: 'POST',
             headers: {
                 'Content-Type': 'text/plain',
             },
-            body: inputText.value,
+            body: input + "について議論して下さい。議論をしていく上で、同じ文章は会話内で繰り返さないでください。何か聞き返したり、反論したりと、常に進展を持たせる内容にしてください。",
         });
         const geminiText = await geminiRes.text();
-        outputText.innerText = geminiText;
+        outputTextL.innerText += geminiText;
 
         // ローディング表示変更
         loadingText.innerText = "発声準備中";
 
         // 音声再生
-        const voicevoxRes = await fetch('api/local/voicevox', {
+        const voicevoxRes = await fetch('../api/voicevox', {
             method: 'POST',
             headers: {
             'Content-Type': 'text/plain',
@@ -48,6 +51,10 @@ async function askButtonClicked() {
         // 音声データを再生
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
+        
+        audio.addEventListener("ended", () => {            
+            askButtonClicked(geminiText);
+        });
         audio.play();
 
         // エコー再生用
