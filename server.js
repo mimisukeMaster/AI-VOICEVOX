@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-require('dotenv').config()
+require("dotenv").config()
 const app = express();
 const PORT = 3000;
 
@@ -60,26 +60,26 @@ app.post("/api/gemini", async (req, res) => {
 app.post("/api/voicevox", async (req, res) => {
 
     // 音声データを作って返す
-    const apiUrl = 'https://deprecatedapis.tts.quest/v2/voicevox/audio';
+    const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
     const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
-    const speakerID = '3';  // 話者ID（3: ずんだもん）
-    const speed = '1.2';
+    const speakerID = "3";  // 話者ID（3: ずんだもん）
+    const speed = "1.2";
     const intonationScale = "0.7";
     try {
         const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${speakerID}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body}`);
             if (!response.ok) {
-                throw new Error('音声生成に失敗しました', response);
+                throw new Error("音声生成に失敗しました", response);
             }
 
         // 音声バイナリを受け取る
         const voicevoxResult = await response.arrayBuffer();
         
         // フロントエンドにBufferに整形して返す
-        res.set('Content-Type', 'audio/wav');
+        res.set("Content-Type", "audio/wav");
         res.send(Buffer.from(voicevoxResult));
         
     } catch (error) {
-        res.status(500).json({ error: 'リクエストに失敗しました' });
+        res.status(500).json({ error: "リクエストに失敗しました" });
         console.log("fetch全体で何らかのエラ―:", error.message);
     }
 });
@@ -88,18 +88,18 @@ app.post("/api/voicevox", async (req, res) => {
 app.post("/api/local/voicevox", async (req, res) => {
 
     /* 音声データを作って返す */
-    const apiUrl = 'http://localhost:50021';
-    const speakerID = '3';  // 話者ID（3: ずんだもん）
+    const apiUrl = "http://localhost:50021";
+    const speakerID = "3";  // 話者ID（3: ずんだもん）
     try {
         const audio_query_response = await fetch(`${apiUrl}/audio_query?text=${encodeURIComponent(req.body)}&speaker=${speakerID}`, {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'accept': 'application/json',
+                "accept": "application/json",
             },
         });
 
         if (!audio_query_response.ok) {
-            throw new Error('音声生成（クエリ生成）に失敗しました');
+            throw new Error("音声生成（クエリ生成）に失敗しました");
         }
 
         const audio_query_data = await audio_query_response.json()
@@ -114,18 +114,18 @@ app.post("/api/local/voicevox", async (req, res) => {
         });
         
         if (!response.ok) {
-            throw new Error('音声生成（wav生成）に失敗しました');
+            throw new Error("音声生成（wav生成）に失敗しました");
         }
 
         // 音声バイナリを受け取る
         const voicevoxResult = await response.arrayBuffer();
         
         // フロントエンドにBufferに整形して返す
-        res.set('Content-Type', 'audio/wav');
+        res.set("Content-Type", "audio/wav");
         res.send(Buffer.from(voicevoxResult));
         
     } catch (error) {
-        res.status(500).json({ error: 'リクエストに失敗しました' });
+        res.status(500).json({ error: "リクエストに失敗しました" });
         console.log("fetch全体で何らかのエラ―:", error.message);
     }
 });  

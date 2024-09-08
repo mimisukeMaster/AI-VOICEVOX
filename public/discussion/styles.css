@@ -85,6 +85,20 @@ textarea:focus {
     border-color:darkgreen;
 }
 
+.checkbox-container {
+    display: inline-flex;
+    align-items: center;
+}
+
+.checkbox-container input {
+        width: 20px;
+        height: 20px; 
+}
+
+.checkbox-container input:checked {
+        accent-color:indianred;
+}
+
 .loading {
     display: flex;
     align-items: center;

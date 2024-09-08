@@ -2,6 +2,7 @@ const askButton = document.getElementById("askButton");
 const inputText = document.getElementById("inputText");
 const outputTextL = document.getElementById("outputTextL");
 const outputTextR = document.getElementById("outputTextR");
+const useLocalApi = document.getElementById("useLocalApi");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 
@@ -19,10 +20,10 @@ async function askButtonClicked(input) {
 
         // バックへPOSTメッセージを送る
         // POSTメッセージは質問文を送るのでstring型を指定する
-        const geminiRes = await fetch('../api/gemini', {
-            method: 'POST',
+        const geminiRes = await fetch("../api/gemini", {
+            method: "POST",
             headers: {
-                'Content-Type': 'text/plain',
+                "Content-Type": "text/plain",
             },
             body: input + "について議論して下さい。議論をしていく上で、同じ文章は会話内で繰り返さないでください。何か聞き返したり、反論したりと、常に進展を持たせる内容にしてください。",
         });
@@ -32,17 +33,24 @@ async function askButtonClicked(input) {
         // ローディング表示変更
         loadingText.innerText = "発声準備中";
 
-        // 音声再生
-        const voicevoxRes = await fetch('../api/voicevox', {
-            method: 'POST',
+        // アクセス先指定
+        let endPointURL = null;
+        if(useLocalApi.checked) {
+            endPointURL = "api/local/voicevox";
+        } else {
+            endPointURL = "api/voicevox";
+        }
+        // 音声生成
+        const voicevoxRes = await fetch("../api/voicevox", {
+            method: "POST",
             headers: {
-            'Content-Type': 'text/plain',
+            "Content-Type": "text/plain",
             },
             body: geminiText,
         });
 
         if (!voicevoxRes.ok) {
-            throw new Error('サーバーとの通信に失敗しました');
+            throw new Error("サーバーとの通信に失敗しました");
         }
 
         // 音声データをバイナリとして取得
@@ -71,7 +79,7 @@ async function askButtonClicked(input) {
         };
 
     } catch (error){
-    console.error('エラー: ', error);
+    console.error("エラー: ", error);
     
     } finally {
         // Loading表示を非表示にする

@@ -1,6 +1,7 @@
 const askButton = document.getElementById("askButton");
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
+const useLocalApi = document.getElementById("useLocalApi");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 
@@ -14,12 +15,11 @@ async function askButtonClicked() {
         dotsText.style.display = "inline-block";
         loadingText.innerText = "考え中";
 
-        // バックへPOSTメッセージを送る
-        // POSTメッセージは質問文を送るのでstring型を指定する
-        const geminiRes = await fetch('api/gemini', {
-            method: 'POST',
+        // 文章を送るのでstring型でPOST送信
+        const geminiRes = await fetch("api/gemini", {
+            method: "POST",
             headers: {
-                'Content-Type': 'text/plain',
+                "Content-Type": "text/plain",
             },
             body: inputText.value,
         });
@@ -29,17 +29,25 @@ async function askButtonClicked() {
         // ローディング表示変更
         loadingText.innerText = "発声準備中";
 
-        // 音声再生
-        const voicevoxRes = await fetch('api/local/voicevox', {
-            method: 'POST',
+        // アクセス先指定
+        let endPointURL = null;
+        if(useLocalApi.checked) {
+            endPointURL = "api/local/voicevox";
+        } else {
+            endPointURL = "api/voicevox";
+        }
+        
+        // 音声生成
+        const voicevoxRes = await fetch(endPointURL, {
+            method: "POST",
             headers: {
-            'Content-Type': 'text/plain',
+            "Content-Type": "text/plain",
             },
             body: geminiText,
         });
 
         if (!voicevoxRes.ok) {
-            throw new Error('サーバーとの通信に失敗しました');
+            throw new Error("サーバーとの通信に失敗しました");
         }
 
         // 音声データをバイナリとして取得
@@ -64,7 +72,7 @@ async function askButtonClicked() {
         };
 
     } catch (error){
-    console.error('エラー: ', error);
+    console.error("エラー: ", error);
     
     } finally {
         // Loading表示を非表示にする
