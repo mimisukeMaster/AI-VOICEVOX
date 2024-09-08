@@ -5,12 +5,13 @@ const outputTextR = document.getElementById("outputTextR");
 const useLocalApi = document.getElementById("useLocalApi");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
+let orderInt = 0;
 
 askButton.addEventListener("click", () => {
-    askButtonClicked(inputText.value);
+    askButtonClicked(inputText.value, orderInt);
 });
 
-async function askButtonClicked(input) {
+async function askButtonClicked(input, order) {
     
     try{
         // ローディング表示
@@ -28,7 +29,14 @@ async function askButtonClicked(input) {
             body: input + "について議論して下さい。議論をしていく上で、同じ文章は会話内で繰り返さないでください。何か聞き返したり、反論したりと、常に進展を持たせる内容にしてください。",
         });
         const geminiText = await geminiRes.text();
-        outputTextL.innerText += geminiText;
+
+        // 発言を分ける
+        if (order % 2 === 0) {
+            outputTextL.innerText += geminiText;
+        } else {
+            outputTextR.innerText += geminiText;
+        }
+        order++;
 
         // ローディング表示変更
         loadingText.innerText = "発声準備中";
