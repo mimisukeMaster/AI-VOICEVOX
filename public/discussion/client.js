@@ -1,75 +1,110 @@
 const askButton = document.getElementById("askButton");
 const inputText = document.getElementById("inputText");
-const outputTextL = document.getElementById("outputTextL");
-const outputTextR = document.getElementById("outputTextR");
+const outputText = document.getElementById("outputText");
 const useLocalApi = document.getElementById("useLocalApi");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 let orderInt = 0;
 
 askButton.addEventListener("click", () => {
-    askButtonClicked(inputText.value, orderInt);
+    askButtonClicked(inputText.value);
 });
 
-async function askButtonClicked(input, order) {
+inputText.addEventListener("keydown", (event) => {
+    if (event.ctrlKey && event.key === "Enter") {
+        askButtonClicked(inputText.value);
+    }
+});
+
+async function askButtonClicked(input) {
     
     try{
         // ローディング表示
         loadingText.style.display = "inline-block";
         dotsText.style.display = "inline-block";
         loadingText.innerText = "考え中";
-
+        
+        // response用変数
+        let geminiText = null;
+        let cohereText = null;
+        
         // バックへPOSTメッセージを送る
         // POSTメッセージは質問文を送るのでstring型を指定する
-        const geminiRes = await fetch("../api/gemini", {
+        // 発言を分ける
+        orderInt++;
+        
+        if (orderInt % 2 !== 0) {
+            
+            if (orderInt === 1) {
+                input += "について議論して下さい。議論をしていく上で、同じ文章は会話内で繰り返さないでください。何か聞き返したり、反論したりと、常に進展を持たせる内容にしてください。"
+            }
+            console.log("GeminiFetchするよ");
+            
+            const gemini = await fetch("../api/gemini", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain",
+                },
+                body: input,
+            });
+            geminiText = await gemini.text();
+            
+            outputText.innerHTML += "<br><div class='geminiText'>" + geminiText + "</div>";
+        } else {
+            console.log("Coherefetchするよ")
+            const cohere = await fetch("../api/cohere", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain",
+                },
+                body: input,
+            });
+            cohereText = await cohere.text();
+            outputText.innerHTML += "<br><div class='cohereText'>" + cohereText + "</div>";
+        }
+        
+        // ローディング表示変更
+        loadingText.innerText = "発声準備中";
+        
+        // アクセス先指定
+        let endPointURL = null;
+        if(useLocalApi.checked) {
+            endPointURL = "../api/local/voicevox";
+        } else {
+            endPointURL = "../api/voicevox";
+        }
+        // 音声生成
+        let bodyText = null;
+        if (orderInt % 2 !== 0) bodyText = geminiText;
+        else bodyText = cohereText;
+        console.log(bodyText)
+        const voicevox = await fetch(endPointURL, {
             method: "POST",
             headers: {
                 "Content-Type": "text/plain",
             },
-            body: input + "について議論して下さい。議論をしていく上で、同じ文章は会話内で繰り返さないでください。何か聞き返したり、反論したりと、常に進展を持たせる内容にしてください。",
+            body: bodyText,
         });
-        const geminiText = await geminiRes.text();
-
-        // 発言を分ける
-        if (order % 2 === 0) {
-            outputTextL.innerText += geminiText;
-        } else {
-            outputTextR.innerText += geminiText;
-        }
-        order++;
-
-        // ローディング表示変更
-        loadingText.innerText = "発声準備中";
-
-        // アクセス先指定
-        let endPointURL = null;
-        if(useLocalApi.checked) {
-            endPointURL = "api/local/voicevox";
-        } else {
-            endPointURL = "api/voicevox";
-        }
-        // 音声生成
-        const voicevoxRes = await fetch("../api/voicevox", {
-            method: "POST",
-            headers: {
-            "Content-Type": "text/plain",
-            },
-            body: geminiText,
-        });
-
-        if (!voicevoxRes.ok) {
+        
+        if (!voicevox.ok) {
             throw new Error("サーバーとの通信に失敗しました");
         }
-
+        
         // 音声データをバイナリとして取得
-        const audioBlob = await voicevoxRes.blob();
+        const audioBlob = await voicevox.blob();
         
         // 音声データを再生
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
         
         audio.addEventListener("ended", () => {            
-            askButtonClicked(geminiText);
+            if (orderInt % 2 !== 0) {
+                console.log("GeminiからCohereにわたる");
+                askButtonClicked(geminiText);
+            } else {
+                console.log("cohereからGeminiにわたる")
+                askButtonClicked(cohereText);
+            }
         });
         audio.play();
 

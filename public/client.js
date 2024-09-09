@@ -16,7 +16,7 @@ async function askButtonClicked() {
         loadingText.innerText = "考え中";
 
         // 文章を送るのでstring型でPOST送信
-        const geminiRes = await fetch("api/gemini", {
+        const geminiRes = await fetch("api/cohere", {
             method: "POST",
             headers: {
                 "Content-Type": "text/plain",

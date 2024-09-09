@@ -51,10 +51,36 @@ app.post("/api/gemini", async (req, res) => {
 
     // 実際にプロンプト文を送信して返答を代入
     const geminiResult = await chatSession.sendMessage(req.body + 
-        "/ただし、会話として成立するように全く同じことを繰り返さず、常に会話を展開させることを意識してください。回答は口語体にして、「。、！？」以外の記号(マークアップ用も含む)を使わないで下さい。");
+        "/ただし、会話として成立するように全く同じことを繰り返さず、常に展開させることを意識してください。回答は口語体にして、記号は「。、！？」のみ使えます。これら以外の記号(マークダウン用も含む)を使わないで下さい。");
     
     res.send(geminiResult.response.text());
 });
+
+/* cohere用 HTTP POST */
+app.post("/api/cohere", async (req, res) => {
+    
+    // cohereの Chat API の準備 Keyは.envから取得
+    const CohereClient = require('cohere-ai').CohereClient;
+
+    const cohere = new CohereClient({
+    token: process.env.COHERE_API_KEY,
+    });
+
+    try {
+        // チャットリクエストを送信する
+        const cohereResult = await cohere.chat({
+            model: "command-r-plus",
+            message: req.body + "回答は必ず300文字以内にし、話しかける口調にして、「。、！？」以外の記号(マークダウン用も含む)を使わないで下さい。",
+        });
+
+        res.send(cohereResult.text);
+
+    } catch (error) {
+        // エラーハンドリング
+        console.error('Error:', error);
+    }
+
+})
 
 /* VOICEVOX用 HTTP POST */
 app.post("/api/voicevox", async (req, res) => {
