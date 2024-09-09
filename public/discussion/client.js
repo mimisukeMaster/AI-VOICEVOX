@@ -1,4 +1,4 @@
-const askButton = document.getElementById("askButton");
+const discussButton = document.getElementById("discussButton");
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
 const useLocalApi = document.getElementById("useLocalApi");
@@ -6,7 +6,7 @@ const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 let orderInt = 0;
 
-askButton.addEventListener("click", () => {
+discussButton.addEventListener("click", () => {
     askButtonClicked(inputText.value);
 });
 
@@ -49,7 +49,7 @@ async function askButtonClicked(input) {
             });
             geminiText = await gemini.text();
             
-            outputText.innerHTML += "<br><div class='geminiText'>" + geminiText + "</div>";
+            outputText.innerHTML += "<br><div class='geminiDiscuss'>" + geminiText + "</div>";
         } else {
             console.log("Coherefetchするよ")
             const cohere = await fetch("../api/cohere", {
@@ -60,7 +60,7 @@ async function askButtonClicked(input) {
                 body: input,
             });
             cohereText = await cohere.text();
-            outputText.innerHTML += "<br><div class='cohereText'>" + cohereText + "</div>";
+            outputText.innerHTML += "<br><div class='cohereDiscuss'>" + cohereText + "</div>";
         }
         
         // ローディング表示変更
