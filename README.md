@@ -2,13 +2,12 @@
 ユーザーの質問をGeminiAPIにより回答し、VOICEVOXのAPIで読み上げるWebアプリです。追加の機能を実装中です。
 
 ## Requirements
-`npm`が効く環境で、以下のパッケージをインストールしてください。
+`npm`が効く環境で、以下のコマンドを実行して[package.json](/package.json)に記載されたパッケージをインストールしてください。
 ```cmd
-(nodejs-22.7.0)
-express@4.19.2 
-@google/generative-ai@0.17.1 
-dotenv@16.4.5
+npm install
+(自機はnodejs-22.7.0で実行)
 ```
+
 ## Directory
 ```
 GeminiVoicevox
@@ -45,7 +44,7 @@ VOICEVOX_API_KEY="**********"
 ## Execution
 npmのパスが通るコマンドラインで、プロジェクトのルートディレクトリに移動し、以下を実行してください。
 ```cmd
-npm server.js
+npm start
 ```
 以下の表示が出たら、http://localhost:3000 を開きます。
 ```cmd

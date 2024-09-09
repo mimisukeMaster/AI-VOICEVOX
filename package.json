@@ -1,8 +1,8 @@
 {
-    "name": "my-python-server",
+    "name": "gemini-voicevox-server",
     "version": "1.0.0",
     "scripts": {
-        "start": "server.js"
+        "start": "node server.js"
     },
     "dependencies": {
         "@google/generative-ai": "^0.17.1",
