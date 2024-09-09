@@ -7,6 +7,13 @@
 npm install
 (自機はnodejs-22.7.0で実行)
 ```
+以下のパッケージがインストールされます。
+```cmd
+"@google/generative-ai": "^0.17.1",
+"cohere-ai": "^7.13.0",
+"dotenv": "^16.4.5",
+"express": "^4.19.2
+```
 
 ## Directory
 ```
@@ -35,9 +42,10 @@ GeminiVoicevox
 
 
 ## Initial Setup
-GeminiAPI Key と VOICEVOX Web版 API Key が必要です。キーを取得後、ルートディレクトリに.envファイルを作成し格納してください。
+GeminiAPI Key, cohere API Key, VOICEVOX Web版 API Key が必要です。キーを取得後、ルートディレクトリに.envファイルを作成し格納してください。
 ```env
 GEMINI_API_KEY="**********"
+COHERE_API_KEY="**********"
 VOICEVOX_API_KEY="**********"
 ```
 

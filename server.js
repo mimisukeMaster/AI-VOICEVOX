@@ -70,7 +70,7 @@ app.post("/api/cohere", async (req, res) => {
         // チャットリクエストを送信する
         const cohereResult = await cohere.chat({
             model: "command-r-plus",
-            message: req.body + "回答は必ず300文字以内にし、話しかける口調にして、「。、！？」以外の記号(マークダウン用も含む)を使わないで下さい。",
+            message: req.body + "回答は必ず200文字以内にし、話しかける口調にして、「。、！？」以外の記号(マークダウン用も含む)を使わないで下さい。",
         });
 
         res.send(cohereResult.text);
