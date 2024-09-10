@@ -1,6 +1,7 @@
 const discussButton = document.getElementById("discussButton");
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
+const characterID = document.getElementById("character")
 const useLocalApi = document.getElementById("useLocalApi");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
@@ -67,6 +68,8 @@ async function askButtonClicked(input) {
             cohereText = await cohere.text();
             outputText.innerHTML += "<br><div class='cohereDiscuss'>" + cohereText + "</div>";
         }
+        // 最下部に移動
+        inputText.scrollIntoView({ behavior: 'smooth', block: 'end' });
         
         // ローディング表示変更
         loadingText.innerText = "発声準備中";
@@ -80,15 +83,24 @@ async function askButtonClicked(input) {
         }
         // 音声生成
         let bodyText = null;
-        if (orderInt % 2 !== 0) bodyText = geminiText;
-        else bodyText = cohereText;
+        let speakerID = null;
+        if (orderInt % 2 !== 0){
+            bodyText = geminiText;
+            speakerID = "3"
+        } else {
+            bodyText = cohereText;
+            speakerID = characterID.value;
+        }
         console.log(bodyText)
         const voicevox = await fetch(endPointURL, {
             method: "POST",
             headers: {
-                "Content-Type": "text/plain",
+                "Content-Type": "application/json",
             },
-            body: bodyText,
+            body: JSON.stringify({
+                text: bodyText,
+                speaker: speakerID
+            })
         });
         
         if (!voicevox.ok) {

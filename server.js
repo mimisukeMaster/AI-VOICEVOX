@@ -8,7 +8,7 @@ const PORT = 3000;
 // フロントJSから送られるデータ型に合わせたミドルウェアを設定
 // その型を受け付けられるようにする
 app.use(express.text());
-// app.use(express.json());
+app.use(express.json());
 
 // 起動サーバーのルート指定
 app.use("/", express.static(path.join(__dirname, "public")));
@@ -51,7 +51,7 @@ app.post("/api/gemini", async (req, res) => {
 
     // 実際にプロンプト文を送信して返答を代入
     const geminiResult = await chatSession.sendMessage(req.body + 
-        "/ただし、会話として成立するように全く同じことを繰り返さず、常に展開させることを意識してください。回答は口語体にして、記号は「。、！？」のみ使えます。これら以外の記号(マークダウン用も含む)を使わないで下さい。");
+        "/ただし、回答は必ず200文字以内にし、会話として成立するように同じ内容を繰り返さず、常に展開させることを意識してください。回答は口語体にして、記号は「。、！？」のみ使えます。これら以外の記号(マークダウン用も含む)を使わないで下さい。");
     
     res.send(geminiResult.response.text());
 });
@@ -88,11 +88,10 @@ app.post("/api/voicevox", async (req, res) => {
     // 音声データを作って返す
     const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
     const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
-    const speakerID = 3;  // 話者ID（3: ずんだもん）
     const intonationScale = 0.7;
     const speed = 1.2;
     try {
-        const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${speakerID}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body}`);
+        const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${req.body.speaker}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body.text}`);
             if (!response.ok) {
                 throw new Error("音声生成に失敗しました", response);
             }
@@ -119,7 +118,7 @@ app.post("/api/local/voicevox", async (req, res) => {
     const intonationScale = 0.7;
     const speed = 1.2;
     try {
-        const audio_query_response = await fetch(`${apiUrl}/audio_query?text=${encodeURIComponent(req.body)}&speaker=${speakerID}`, {
+        const audio_query_response = await fetch(`${apiUrl}/audio_query?text=${encodeURIComponent(req.body.text)}&speaker=${req.body.speaker}`, {
             method: "POST",
             headers: {
                 "accept": "application/json",
@@ -135,7 +134,7 @@ app.post("/api/local/voicevox", async (req, res) => {
         audio_query_data.intonationScale = intonationScale;
         audio_query_data.speedScale = speed;
 
-        const response = await fetch(`${apiUrl}/synthesis?speaker=${speakerID}`, {
+        const response = await fetch(`${apiUrl}/synthesis?speaker=${req.body.speaker}`, {
             method: "POST",
             headers: {
                 "accept": "audio/wav",

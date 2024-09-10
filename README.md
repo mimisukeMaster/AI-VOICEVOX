@@ -72,6 +72,7 @@ http://localhost:3000/<br>
 
 こちらも、「ローカルAPIを使う」にチェックを入れた場合VOICEVOXソフトを起動してから「会議開始！」ボタンを押してください。
 
+
 ## Reference
 VOICEVOX API Key 取得先と解説記事
 - https://voicevox.su-shiki.com/su-shikiapis/
@@ -80,6 +81,13 @@ VOICEVOX API Key 取得先と解説記事
 
 GeminiAPI Key 取得先
 - https://aistudio.google.com/app/apikey
+
+## Author
+ みみすけ名人 mimisukeMaster<br>
+
+ [<img src="https://img.shields.io/badge/-X-X.svg?style=flat-square&logo=X&logoColor=white&color=black">](https://x.com/mimisukeMaster)
+[<img src="https://img.shields.io/badge/-ArtStation-artstation.svg?&style=flat-square&logo=artstation&logoColor=blue&color=gray">](https://www.artstation.com/mimisukemaster)
+[<img src="https://img.shields.io/badge/-Youtube-youtube.svg?&style=flat-square&logo=youtube&logoColor=white&color=red">](https://www.youtube.com/channel/UCWnmp8t4GJzcjBxhtgo9rKQ)
 
 ## LICENCE
 GeminiVoicevox is under [Apache-2.0 licence](/LICENSE).

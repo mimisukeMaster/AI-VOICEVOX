@@ -49,6 +49,10 @@ p {
     margin-left: 10px;
 }
 
+select {
+    font-family: "myfont";
+}
+
 textarea {
     border-radius: 10px;
     border-width: 3px;

@@ -54,9 +54,12 @@ async function askButtonClicked(input) {
         const voicevoxRes = await fetch(endPointURL, {
             method: "POST",
             headers: {
-            "Content-Type": "text/plain",
+            "Content-Type": "application/json",
             },
-            body: geminiText,
+            body: JSON.stringify({
+                text: geminiText,
+                speaker: "3"
+            })
         });
 
         if (!voicevoxRes.ok) {
