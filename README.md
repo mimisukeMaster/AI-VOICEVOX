@@ -62,8 +62,7 @@ Server started on port:3000
 http://localhost:3000/<br>
 メインページです。GeminiAPIを呼んで質問文を投げた後、レスポンスをVOICEVOXで読み上げています。
 
-「ローカルAPIを使う」にチェックを入れた場合、ローカルのVOICEVOX Engineを利用します。別途、VOICEVOXソフトを起動しておいてください。<br>
-ローカルの場合、API側が話す速さを設定できない仕様になっています。Web版では速めに設定しているため、より遅くなります。
+「ローカルAPIを使う」にチェックを入れた場合、ローカルのVOICEVOX Engineを利用します。別途、VOICEVOXソフトを起動しておいてください。
 
 ### AI会議
  http://localhost:3000/discussion<br>

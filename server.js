@@ -88,9 +88,9 @@ app.post("/api/voicevox", async (req, res) => {
     // 音声データを作って返す
     const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
     const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
-    const speakerID = "3";  // 話者ID（3: ずんだもん）
-    const speed = "1.2";
-    const intonationScale = "0.7";
+    const speakerID = 3;  // 話者ID（3: ずんだもん）
+    const intonationScale = 0.7;
+    const speed = 1.2;
     try {
         const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${speakerID}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body}`);
             if (!response.ok) {
@@ -110,12 +110,14 @@ app.post("/api/voicevox", async (req, res) => {
     }
 });
 
-/* ローカル　VOICEVOXアプリ用 HTTP POST */
+/* ローカル版 VOICEVOX用 HTTP POST */
 app.post("/api/local/voicevox", async (req, res) => {
 
     /* 音声データを作って返す */
     const apiUrl = "http://localhost:50021";
-    const speakerID = "3";  // 話者ID（3: ずんだもん）
+    const speakerID = 3;  // 話者ID（3: ずんだもん）
+    const intonationScale = 0.7;
+    const speed = 1.2;
     try {
         const audio_query_response = await fetch(`${apiUrl}/audio_query?text=${encodeURIComponent(req.body)}&speaker=${speakerID}`, {
             method: "POST",
@@ -129,6 +131,9 @@ app.post("/api/local/voicevox", async (req, res) => {
         }
 
         const audio_query_data = await audio_query_response.json()
+
+        audio_query_data.intonationScale = intonationScale;
+        audio_query_data.speedScale = speed;
 
         const response = await fetch(`${apiUrl}/synthesis?speaker=${speakerID}`, {
             method: "POST",
