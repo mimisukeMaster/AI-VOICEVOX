@@ -6,6 +6,11 @@ const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 let orderInt = 0;
 
+inputText.addEventListener("input", () => {
+    if (inputText.value.trim() === "") discussButton.disabled = true;
+    else discussButton.disabled = false;
+});
+
 discussButton.addEventListener("click", () => {
     askButtonClicked(inputText.value);
 });

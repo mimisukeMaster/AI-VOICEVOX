@@ -62,7 +62,20 @@ textarea:focus {
     box-shadow: 4px 4px 3px #333333;
 }
 
+#askButton:disabled, #discussButton:disabled {
+    background-color: #999;
+    border-color: #777;
+    cursor: not-allowed;
+}
+
+#askButton:disabled:hover, #discussButton:disabled:hover {
+    background-color: #999;
+    border-color: #777;
+    cursor: not-allowed;
+}
+
 #askButton {
+    transition: background-color 0.5s;
     width: 110px;
     height: 35px;
     text-align: center;
@@ -75,6 +88,7 @@ textarea:focus {
     color: white;
     box-shadow: 1px 1px #333333;
 }
+
 #askButton:hover {
     transition: background-color 0.2s;
     background-color: dodgerblue;
@@ -86,6 +100,7 @@ textarea:focus {
 }
 
 #discussButton {
+    transition: background-color 0.5s;
     width: 110px;
     height: 35px;
     text-align: center;

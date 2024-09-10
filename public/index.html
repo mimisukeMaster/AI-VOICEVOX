@@ -18,11 +18,12 @@
     
     <p>訊きたいことを入力してください</p>
     
-    <p><textarea cols="60" rows="10" id="inputText"></textarea></p>
+    <p><textarea cols="60" rows="10" id="inputText" placeholder="例: GeminiとClaude、どっちが優秀？"></textarea></p>
     
-    <p class="loading"><button type="button" id="askButton">質問する！</button>
+    <p class="loading"><button type="button" id="askButton" disabled>質問する！</button>
         <label class="checkbox-container">
-            <input type="checkbox" id="useLocalApi">ローカルのVOICEVOXを使う
+            <input type="checkbox" id="useLocalApi">
+            <span title ="VOICEVOXソフトを起動しておく必要があります">ローカルのVOICEVOXを使う</span>
         </label>
         <span id="loading"></span><span id="dots"></span>
     </p>

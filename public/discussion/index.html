@@ -18,11 +18,12 @@
     
     <p>議題を入力してください</p>
     
-    <p><textarea cols="40" rows="3" id="inputText"></textarea></p>
+    <p><textarea cols="40" rows="3" id="inputText" placeholder="例: 週休3日制はアリかナシか"></textarea></p>
     <p>について議論</p>
-    <p class="loading"><button id="discussButton", type="button">会議開始！</button>
+    <p class="loading"><button type="button" id="discussButton" disabled>会議開始！</button>
         <label class="checkbox-container">
-            <input type="checkbox" id="useLocalApi">ローカルのVOICEVOXを使う
+            <input type="checkbox" id="useLocalApi">
+            <span title ="VOICEVOXソフトを起動しておく必要があります">ローカルのVOICEVOXを使う</span>
         </label>
         <span id="loading"></span><span id="dots"></span>
     </p>
