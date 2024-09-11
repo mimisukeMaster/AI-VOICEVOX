@@ -49,6 +49,17 @@ p {
     margin-left: 10px;
 }
 
+select {
+    font-family: "myfont";
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+option { 
+    background-color:white;
+    cursor: pointer;
+}
+
 textarea {
     border-radius: 10px;
     border-width: 3px;
@@ -62,7 +73,16 @@ textarea:focus {
     box-shadow: 4px 4px 3px #333333;
 }
 
+#askButton:disabled, #discussButton:disabled {
+    cursor: not-allowed;
+}
+
+#askButton:disabled:hover, #discussButton:disabled:hover {
+    cursor: not-allowed;
+}
+
 #askButton {
+    transition: background-color 0.5s;
     width: 110px;
     height: 35px;
     text-align: center;
@@ -75,6 +95,7 @@ textarea:focus {
     color: white;
     box-shadow: 1px 1px #333333;
 }
+
 #askButton:hover {
     transition: background-color 0.2s;
     background-color: dodgerblue;
@@ -83,6 +104,30 @@ textarea:focus {
 #askButton:active {
     background-color: royalblue;
     border-color:steelblue;
+}
+
+#discussButton {
+    transition: background-color 0.5s;
+    width: 110px;
+    height: 35px;
+    text-align: center;
+    font-family: "myfont";
+    font-weight: normal;
+    font-size: 16px;
+    background-color:mediumseagreen;
+    border-radius: 1px;
+    border-color:forestgreen;
+    color: white;
+    box-shadow: 1px 1px #333333;
+}
+#discussButton:hover {
+    transition: background-color 0.2s;
+    background-color:seagreen;
+}
+
+#discussButton:active {
+    background-color:green;
+    border-color:darkgreen;
 }
 
 .checkbox-container {
@@ -134,4 +179,20 @@ textarea:focus {
     80%, 100% {
         content: "...";
     }  
+}
+
+.geminiDiscuss::before {
+    content: "先攻";
+    color:white;
+    background-color: hotpink;
+    padding: 0px 2px 0px 2px;
+    display: inline-block;
+}
+
+.cohereDiscuss::before {
+    content: "後攻";
+    color: white;
+    background-color: deepskyblue;
+    padding: 0px 2px 0px 2px;
+    display: inline-block;
 }

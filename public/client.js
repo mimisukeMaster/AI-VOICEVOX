@@ -5,9 +5,22 @@ const useLocalApi = document.getElementById("useLocalApi");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 
-askButton.addEventListener("click", askButtonClicked);
+inputText.addEventListener("input", () => {
+    if (inputText.value.trim() === "") askButton.disabled = true;
+    else askButton.disabled = false;
+});
 
-async function askButtonClicked() {
+askButton.addEventListener("click", () => {
+    askButtonClicked(inputText.value);
+});
+
+inputText.addEventListener("keydown", (event) => {
+    if (event.ctrlKey && event.key === "Enter") {
+        askButtonClicked(inputText.value);
+    }
+});
+
+async function askButtonClicked(input) {
     
     try{
         // ローディング表示
@@ -21,7 +34,7 @@ async function askButtonClicked() {
             headers: {
                 "Content-Type": "text/plain",
             },
-            body: inputText.value,
+            body: input,
         });
         const geminiText = await geminiRes.text();
         outputText.innerText = geminiText;
@@ -41,9 +54,12 @@ async function askButtonClicked() {
         const voicevoxRes = await fetch(endPointURL, {
             method: "POST",
             headers: {
-            "Content-Type": "text/plain",
+            "Content-Type": "application/json",
             },
-            body: geminiText,
+            body: JSON.stringify({
+                text: geminiText,
+                speaker: "3"
+            })
         });
 
         if (!voicevoxRes.ok) {
@@ -57,14 +73,6 @@ async function askButtonClicked() {
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
         audio.play();
-
-        // エコー再生用
-        // for (let i = 0; i < 10; i++) {
-        //     setTimeout(() => {
-        //         const audio = new Audio(audioUrl);
-        //         audio.play();
-        //     }, i * 200);
-        // }
 
         // 使い終わったらURLを解放 メモリリーク防ぐ
         audio.onended = () => {
