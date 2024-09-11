@@ -51,6 +51,13 @@ p {
 
 select {
     font-family: "myfont";
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+option { 
+    background-color:white;
+    cursor: pointer;
 }
 
 textarea {
@@ -67,14 +74,10 @@ textarea:focus {
 }
 
 #askButton:disabled, #discussButton:disabled {
-    background-color: #999;
-    border-color: #777;
     cursor: not-allowed;
 }
 
 #askButton:disabled:hover, #discussButton:disabled:hover {
-    background-color: #999;
-    border-color: #777;
     cursor: not-allowed;
 }
 
