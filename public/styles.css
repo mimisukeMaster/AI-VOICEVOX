@@ -52,11 +52,14 @@ p {
 select {
     font-family: "myfont";
     border-radius: 5px;
+    color: white;
+    background-color:brown;
     cursor: pointer;
 }
 
-option { 
-    background-color:white;
+option {
+    color: white;
+    background-color:brown;
     cursor: pointer;
 }
 
@@ -73,11 +76,11 @@ textarea:focus {
     box-shadow: 4px 4px 3px #333333;
 }
 
-#askButton:disabled, #discussButton:disabled {
+#askButton:disabled, #debateButton:disabled {
     cursor: not-allowed;
 }
 
-#askButton:disabled:hover, #discussButton:disabled:hover {
+#askButton:disabled:hover, #debateButton:disabled:hover {
     cursor: not-allowed;
 }
 
@@ -106,7 +109,7 @@ textarea:focus {
     border-color:steelblue;
 }
 
-#discussButton {
+#debateButton {
     transition: background-color 0.5s;
     width: 110px;
     height: 35px;
@@ -120,12 +123,12 @@ textarea:focus {
     color: white;
     box-shadow: 1px 1px #333333;
 }
-#discussButton:hover {
+#debateButton:hover {
     transition: background-color 0.2s;
     background-color:seagreen;
 }
 
-#discussButton:active {
+#debateButton:active {
     background-color:green;
     border-color:darkgreen;
 }
@@ -181,7 +184,7 @@ textarea:focus {
     }  
 }
 
-.geminiDiscuss::before {
+.geminiDebate::before {
     content: "先攻";
     color:white;
     background-color: hotpink;
@@ -189,7 +192,7 @@ textarea:focus {
     display: inline-block;
 }
 
-.cohereDiscuss::before {
+.cohereDebate::before {
     content: "後攻";
     color: white;
     background-color: deepskyblue;
