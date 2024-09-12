@@ -69,7 +69,7 @@ async function askButtonClicked(input) {
             outputText.innerHTML += "<br><div class='cohereDiscuss'>" + cohereText + "</div>";
         }
         // 最下部に移動
-        inputText.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        inputText.scrollIntoView({ behavior: 'smooth', block: 'start' });
         
         // ローディング表示変更
         loadingText.innerText = "発声準備中";
