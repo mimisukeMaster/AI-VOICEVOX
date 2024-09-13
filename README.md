@@ -22,7 +22,7 @@ GeminiVoicevox
 | server.js
 ∟ public
   |
-  |-discussion
+  |-debate
   | | client.js
   | | index.html
   | ∟ styles.css
@@ -38,7 +38,7 @@ GeminiVoicevox
 
 **public**: http://localhost:3000 接続時のルートにあたる箇所
 
-**discussion**: http://localhost:3000/discussion にあたる箇所
+**debate**: http://localhost:3000/discussion にあたる箇所
 
 
 ## Initial Setup
