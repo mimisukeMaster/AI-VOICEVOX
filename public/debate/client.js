@@ -1,3 +1,4 @@
+
 const debateButton = document.getElementById("debateButton");
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
@@ -56,6 +57,7 @@ async function askButtonClicked(input) {
             geminiText = await gemini.text();
             
             outputText.innerHTML += "<br><div class='geminiDebate'>" + geminiText + "</div>";
+
         } else {
             console.log("Coherefetchするよ")
             const cohere = await fetch("../api/cohere", {
@@ -66,7 +68,9 @@ async function askButtonClicked(input) {
                 body: input,
             });
             cohereText = await cohere.text();
+
             outputText.innerHTML += "<br><div class='cohereDebate'>" + cohereText + "</div>";
+
         }
         // 最下部に移動
         inputText.scrollIntoView({ behavior: 'smooth', block: 'start' });
