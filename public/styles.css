@@ -184,6 +184,54 @@ textarea:focus {
     }  
 }
 
+#debateFinish {
+    font-family: "myfont";
+    background-color:paleturquoise;
+    border-radius:30px;
+    border-color: aqua;
+}
+
+#debateFinish:hover {
+    background-color:lightblue;
+    border-color: deepskyblue;
+}
+
+#debateFinish:disabled:hover {
+    cursor: not-allowed;
+}
+
+#finishing {
+    display: none;
+    font-size: 20px;
+    position: relative;
+}
+
+#finishing::after {
+    content: "";
+    animation: finishing 1s steps(5, end) infinite;
+}
+
+@keyframes finishing {
+    0%, 15% {
+        content: " / ";
+    }
+    30% {
+        content: " ／ ";
+    }
+    45% {
+        content: " ― ";
+    }
+    60% {
+        content: " ＼ ";
+    }
+    75% {
+        content: " \\ ";
+    }
+    90%, 100% {
+        content: " | ";
+    }
+}
+
 .geminiDebate::before {
     content: "先攻";
     color:white;

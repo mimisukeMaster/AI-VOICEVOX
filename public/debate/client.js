@@ -6,7 +6,11 @@ const characterID = document.getElementById("character")
 const useLocalApi = document.getElementById("useLocalApi");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
+const debateFinish = document.getElementById("debateFinish");
+const finishingText = document.getElementById("finishingText");
+const finishing = document.getElementById("finishing")
 let orderInt = 0;
+let isFinish = false;
 
 inputText.addEventListener("input", () => {
     if (inputText.value.trim() === "") debateButton.disabled = true;
@@ -23,6 +27,12 @@ inputText.addEventListener("keydown", (event) => {
     }
 });
 
+debateFinish.addEventListener("click", () => {
+    isFinish = true;
+    finishingText.innerText = "今のターンで終了します";
+    finishing.style.display = "inline-block";
+});
+
 async function askButtonClicked(input) {
     
     try{
@@ -30,6 +40,9 @@ async function askButtonClicked(input) {
         loadingText.style.display = "inline-block";
         dotsText.style.display = "inline-block";
         loadingText.innerText = "考え中";
+        
+        // 終了ボタン有効化
+        debateFinish.disabled = false;
         
         // response用変数
         let geminiText = null;
@@ -45,7 +58,6 @@ async function askButtonClicked(input) {
             if (orderInt === 1) {
                 input += "について議論して下さい。議論をしていく上で、同じ文章は会話内で繰り返さないでください。何か聞き返したり、反論したりと、常に進展を持たせる内容にしてください。"
             }
-            console.log("GeminiFetchするよ");
             
             const gemini = await fetch("../api/gemini", {
                 method: "POST",
@@ -59,7 +71,6 @@ async function askButtonClicked(input) {
             outputText.innerHTML += "<br><div class='geminiDebate'>" + geminiText + "</div>";
 
         } else {
-            console.log("Coherefetchするよ")
             const cohere = await fetch("../api/cohere", {
                 method: "POST",
                 headers: {
@@ -95,7 +106,6 @@ async function askButtonClicked(input) {
             bodyText = cohereText;
             speakerID = characterID.value;
         }
-        console.log(bodyText)
         const voicevox = await fetch(endPointURL, {
             method: "POST",
             headers: {
@@ -118,24 +128,18 @@ async function askButtonClicked(input) {
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
         
-        audio.addEventListener("ended", () => {            
-            if (orderInt % 2 !== 0) {
-                console.log("GeminiからCohereにわたる");
+        // 再呼び出し
+        audio.addEventListener("ended", () => {  
+            if (isFinish) {
+                debateFinishProcess();
+                return;
+            } else if (orderInt % 2 !== 0) {
                 askButtonClicked(geminiText);
             } else {
-                console.log("cohereからGeminiにわたる")
                 askButtonClicked(cohereText);
             }
         });
         audio.play();
-
-        // エコー再生用
-        // for (let i = 0; i < 10; i++) {
-        //     setTimeout(() => {
-        //         const audio = new Audio(audioUrl);
-        //         audio.play();
-        //     }, i * 200);
-        // }
 
         // 使い終わったらURLを解放 メモリリーク防ぐ
         audio.onended = () => {
@@ -150,4 +154,12 @@ async function askButtonClicked(input) {
         loadingText.style.display = "none";
         dotsText.style.display = "none";
     }
+}
+
+function debateFinishProcess() {
+    isFinish = false;
+    orderInt = 0;
+    finishingText.innerText = "";
+    finishing.style.display = "none"
+    debateFinish.disabled = true;
 }
