@@ -1,4 +1,5 @@
-const discussButton = document.getElementById("discussButton");
+
+const debateButton = document.getElementById("debateButton");
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
 const characterID = document.getElementById("character")
@@ -8,11 +9,11 @@ const dotsText = document.getElementById("dots");
 let orderInt = 0;
 
 inputText.addEventListener("input", () => {
-    if (inputText.value.trim() === "") discussButton.disabled = true;
-    else discussButton.disabled = false;
+    if (inputText.value.trim() === "") debateButton.disabled = true;
+    else debateButton.disabled = false;
 });
 
-discussButton.addEventListener("click", () => {
+debateButton.addEventListener("click", () => {
     askButtonClicked(inputText.value);
 });
 
@@ -55,7 +56,8 @@ async function askButtonClicked(input) {
             });
             geminiText = await gemini.text();
             
-            outputText.innerHTML += "<br><div class='geminiDiscuss'>" + geminiText + "</div>";
+            outputText.innerHTML += "<br><div class='geminiDebate'>" + geminiText + "</div>";
+
         } else {
             console.log("Coherefetchするよ")
             const cohere = await fetch("../api/cohere", {
@@ -66,7 +68,9 @@ async function askButtonClicked(input) {
                 body: input,
             });
             cohereText = await cohere.text();
-            outputText.innerHTML += "<br><div class='cohereDiscuss'>" + cohereText + "</div>";
+
+            outputText.innerHTML += "<br><div class='cohereDebate'>" + cohereText + "</div>";
+
         }
         // 最下部に移動
         inputText.scrollIntoView({ behavior: 'smooth', block: 'start' });
