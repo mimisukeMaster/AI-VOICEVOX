@@ -11,7 +11,7 @@ app.use(express.text());
 app.use(express.json());
 
 // 起動サーバーのルート指定
-app.use("/", express.static(path.join(__dirname, "public")));
+app.use("/", express.static(path.join(__dirname, "../public")));
 
 // ポート起動
 app.listen(PORT, () => {
@@ -19,7 +19,7 @@ app.listen(PORT, () => {
 });
 
 /* Gemini用 HTTP POST */
-app.post("/api/gemini", async (req, res) => {
+app.post("/gemini", async (req, res) => {
 
     // GeminiAPIの準備 Keyは.envから取得
     const {
@@ -57,7 +57,7 @@ app.post("/api/gemini", async (req, res) => {
 });
 
 /* cohere用 HTTP POST */
-app.post("/api/cohere", async (req, res) => {
+app.post("/cohere", async (req, res) => {
     
     // cohereの Chat API の準備 Keyは.envから取得
     const CohereClient = require('cohere-ai').CohereClient;
@@ -83,7 +83,7 @@ app.post("/api/cohere", async (req, res) => {
 })
 
 /* VOICEVOX用 HTTP POST */
-app.post("/api/voicevox", async (req, res) => {
+app.post("/voicevox", async (req, res) => {
 
     // 音声データを作って返す
     const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
@@ -110,7 +110,7 @@ app.post("/api/voicevox", async (req, res) => {
 });
 
 /* ローカル版 VOICEVOX用 HTTP POST */
-app.post("/api/local/voicevox", async (req, res) => {
+app.post("/local/voicevox", async (req, res) => {
 
     /* 音声データを作って返す */
     const apiUrl = "http://localhost:50021";
@@ -158,4 +158,6 @@ app.post("/api/local/voicevox", async (req, res) => {
         res.status(500).json({ error: "リクエストに失敗しました" });
         console.log("fetch全体で何らかのエラ―:", error.message);
     }
-});  
+});
+
+module.exports = app;
