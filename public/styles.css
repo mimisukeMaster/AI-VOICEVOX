@@ -41,6 +41,9 @@ h1 {
     font-weight: bold;
 }
 
+h3 {
+    margin-left: 10px;
+}
 rt {
     color: #52781B;
 }
@@ -246,4 +249,9 @@ textarea:focus {
     background-color: deepskyblue;
     padding: 0px 2px 0px 2px;
     display: inline-block;
+}
+
+.links {
+    margin-left: 5px;
+    
 }
