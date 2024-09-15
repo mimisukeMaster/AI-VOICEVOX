@@ -34,6 +34,9 @@ li{
     text-decoration: none;
     color: white;
     margin-right: 35px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 h1 {
@@ -100,6 +103,9 @@ textarea:focus {
     border-color:dodgerblue;
     color: white;
     box-shadow: 1px 1px #333333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #askButton:hover {
@@ -125,6 +131,9 @@ textarea:focus {
     border-color:forestgreen;
     color: white;
     box-shadow: 1px 1px #333333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #debateButton:hover {
     transition: background-color 0.2s;
@@ -159,6 +168,9 @@ textarea:focus {
     display: none;
     margin-left: 10px;
     font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #dots {
