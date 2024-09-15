@@ -1,4 +1,11 @@
 # GeminiVoicevox
+[<img src="https://img.shields.io/github/stars/mimisukeMaster/GeminiVoicevox?&logo=github">](https://github.com/mimisukeMaster/GeminiVoicevox/stargazers)
+[<img src="https://img.shields.io/badge/issues-welcome-green">](https://github.com/mimisukeMaster/GeminiVoicevox/issues)
+[<img src="https://img.shields.io/badge/PRs-welcome-orange?logo=git">](https://github.com/mimisukeMaster/OsakanaFlock/pulls)
+[<img  src="https://img.shields.io/hexpm/l/plug?color=red&logo=apache">](https://www.apache.org/licenses/)<br>
+<img src="https://img.shields.io/github/repo-size/mimisukeMaster/GeminiVoicevox?logo=gitlfs&color=ff69b4">
+[<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc">](https://open.vscode.dev/mimisukeMaster/GeminiVoicevox)
+
 ユーザーの質問をGeminiAPIにより回答し、VOICEVOXのAPIで読み上げるWebアプリです。追加の機能を実装中です。
 
 ## Requirements
@@ -18,18 +25,21 @@ npm install
 ## Directory
 ```
 GeminiVoicevox
-| .env (作成してください)
-| server.js
-∟ public
-  |
-  |-debate
-  | | client.js
-  | | index.html
-  | ∟ styles.css
-  |
-  | client.js
-  | index.html
-  ∟ styles.css
+│  .env (作成してください)
+│  server.js
+└─ public
+   │
+   ├─ about
+   │  └─ index.html
+   │
+   ├─ debate
+   │  │  client.js
+   │  │  index.html
+   │  └─ styles.css
+   │
+   │  client.js
+   │  index.html
+   └─ styles.css
 
 ```
 **server.js**: バックエンド処理
@@ -38,7 +48,9 @@ GeminiVoicevox
 
 **public**: http://localhost:3000 接続時のルートにあたる箇所
 
-**debate**: http://localhost:3000/discussion にあたる箇所
+**debate**: http://localhost:3000/debate にあたる箇所
+
+**about**: http://localhost:3000/about にあたる箇所
 
 
 ## Initial Setup
@@ -60,15 +72,15 @@ Server started on port:3000
 ```
 ### AI豆打者
 http://localhost:3000/<br>
-メインページです。GeminiAPIを呼んで質問文を投げた後、レスポンスをVOICEVOXで読み上げています。
+メインページです。質問文をバックエンドに送り、GeminiAPIを呼んだ後、レスポンスをVOICEVOXで読み上げています。
 
 「ローカルAPIを使う」にチェックを入れた場合、ローカルのVOICEVOX Engineを利用します。別途、VOICEVOXソフトを起動しておいてください。
 
-### AI会議
+### AI討論
  http://localhost:3000/discussion<br>
- 作成中です。GeminiAPIを呼んで議題をプロンプトとして送り、レスポンスをVOICEVOXで読み上げさせます。その後、レスポンスを再びプロンプトとして送り、これを永久的に繰り返します。
+ GeminiAPI、cohere API を用いて話し合いをさせます。議題をプロンプトとしてバックエンドに送り、それぞれのレスポンスをVOICEVOXで読み上げさせます。そのレスポンスを再び送り、これを繰り返します。
 
-終了方法がまだ整備されていないので、べージをリロードして対処してください。
+「対戦相手を変える」で片方の声を変えると、より対話っぽくなります。終了ボタンを押すと現在話されているターンで終了します。（推論中を含む）
 
 こちらも、「ローカルAPIを使う」にチェックを入れた場合VOICEVOXソフトを起動してから「会議開始！」ボタンを押してください。
 
