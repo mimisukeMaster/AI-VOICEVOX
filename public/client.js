@@ -29,13 +29,14 @@ async function askButtonClicked(input) {
         loadingText.innerText = "考え中";
 
         // 文章を送るのでstring型でPOST送信
-        const geminiRes = await fetch("http://gemini-voicevox.vercel.app/api/gemini", {
+        const geminiRes = await fetch("https://gemini-voicevox.vercel.app/api/gemini", {
             method: "POST",
             headers: {
                 "Content-Type": "text/plain",
             },
             body: input,
         });
+        console.log("client.jsからGeminiにfetch")
         const geminiText = await geminiRes.text();
         outputText.innerText = geminiText;
 
@@ -45,9 +46,9 @@ async function askButtonClicked(input) {
         // アクセス先指定
         let endPointURL = null;
         if(useLocalApi.checked) {
-            endPointURL = "http://gemini-voicevox.vercel.app/api/local/voicevox";
+            endPointURL = "https://gemini-voicevox.vercel.app/api/local/voicevox";
         } else {
-            endPointURL = "http://gemini-voicevox.vercel.app/api/voicevox";
+            endPointURL = "https://gemini-voicevox.vercel.app/api/voicevox";
         }
         
         // 音声生成
