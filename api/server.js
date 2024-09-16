@@ -20,7 +20,7 @@ app.listen(PORT, () => {
 
 /* Gemini用 HTTP POST */
 app.post("https://gemini-voicevox.vercel.app/gemini", async (req, res) => {
-
+    console.log("server.jsからgeminiAPI叩く")
     // GeminiAPIの準備 Keyは.envから取得
     const {
         GoogleGenerativeAI,
