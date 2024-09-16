@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const path = require("path");
 require("dotenv").config()
 const app = express();
@@ -9,6 +10,7 @@ const PORT = 3000;
 // その型を受け付けられるようにする
 app.use(express.text());
 app.use(express.json());
+app.use(cors());
 
 // 起動サーバーのルート指定
 app.use("/", express.static(path.join(__dirname, "../public")));
