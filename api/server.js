@@ -19,7 +19,7 @@ app.listen(PORT, () => {
 });
 
 /* Gemini用 HTTP POST */
-app.post("/api/gemini", async (req, res) => {
+app.post("https://gemini-voicevox.vercel.app/gemini", async (req, res) => {
 
     // GeminiAPIの準備 Keyは.envから取得
     const {
@@ -57,7 +57,7 @@ app.post("/api/gemini", async (req, res) => {
 });
 
 /* cohere用 HTTP POST */
-app.post("/api/cohere", async (req, res) => {
+app.post("https://gemini-voicevox.vercel.app/cohere", async (req, res) => {
     
     // cohereの Chat API の準備 Keyは.envから取得
     const CohereClient = require('cohere-ai').CohereClient;
@@ -83,7 +83,7 @@ app.post("/api/cohere", async (req, res) => {
 })
 
 /* VOICEVOX用 HTTP POST */
-app.post("/api/voicevox", async (req, res) => {
+app.post("https://gemini-voicevox.vercel.app/voicevox", async (req, res) => {
 
     // 音声データを作って返す
     const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
@@ -110,7 +110,7 @@ app.post("/api/voicevox", async (req, res) => {
 });
 
 /* ローカル版 VOICEVOX用 HTTP POST */
-app.post("/api/local/voicevox", async (req, res) => {
+app.post("https://gemini-voicevox.vercel.app/local/voicevox", async (req, res) => {
 
     /* 音声データを作って返す */
     const apiUrl = "http://localhost:50021";
