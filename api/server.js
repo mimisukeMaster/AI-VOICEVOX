@@ -22,6 +22,7 @@ app.listen(PORT, () => {
 
 /* Gemini用 HTTP POST */
 app.post("/gemini", async (req, res) => {
+    console.log(req.url  + ", full path: " + req.originalUrl);
     console.log("server.jsからgeminiAPI叩く")
     // GeminiAPIの準備 Keyは.envから取得
     const {

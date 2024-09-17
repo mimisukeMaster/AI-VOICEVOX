@@ -36,6 +36,12 @@ async function askButtonClicked(input) {
             },
             body: input,
         });
+        console.log(geminiRes.url);
+        if (!geminiRes.ok) {
+            const text = await geminiRes.text();
+            throw new Error(`HTTP error! Status: ${geminiRes.status}, Message: ${text}`);
+        }
+        
         console.log("client.jsからGeminiにfetch")
         const geminiText = await geminiRes.text();
         outputText.innerText = geminiText;
