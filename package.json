@@ -2,6 +2,9 @@
     "name": "gemini-voicevox-server",
     "version": "1.0.0",
     "main": "api/server.js",
+    "scripts": {
+        "start": "node api/server.js"
+    },
     "dependencies": {
         "@google/generative-ai": "^0.17.1",
         "cohere-ai": "^7.13.0",

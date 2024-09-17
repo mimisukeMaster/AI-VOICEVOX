@@ -172,3 +172,4 @@ poetry.toml
 
 # nodejs
 node_modules/
+.vercel
