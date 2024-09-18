@@ -22,6 +22,7 @@ app.listen(PORT, () => {
 
 /* Gemini用 HTTP POST */
 app.post("/api/gemini", async (req, res) => {
+    console.log(req.url  + ", full path: " + req.originalUrl);
     console.log("server.jsからgeminiAPI叩く")
     // GeminiAPIの準備 Keyは.envから取得
     const {
@@ -92,21 +93,7 @@ app.post("/api/voicevox", async (req, res) => {
     const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
     const intonationScale = 0.7;
     const speed = 1.2;
-
-    // 進捗データを定期的に送信してタイムアウトを防ぐ chunked encodingを設定
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("Transfer-Encoding", "chunked");
-
-    let progress = 0;
-
-    // 一秒間隔でフロントエンドに進捗状況を送信
-    const interval = setInterval(() => {
-        progress += 10;
-        res.write(JSON.stringify({ status: "processing", progress })); // 進捗を送信
-    }, 1000);
-
     try {
-        // VOICEVOX Web API の呼び出し
         const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${req.body.speaker}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body.text}`);
             if (!response.ok) {
                 throw new Error("音声生成に失敗しました", response);
@@ -115,18 +102,11 @@ app.post("/api/voicevox", async (req, res) => {
         // 音声バイナリを受け取る
         const voicevoxResult = await response.arrayBuffer();
         
-        // 進捗の送信を停止
-        clearInterval(interval);
-
-        // 完了を知らせる
-        res.write(JSON.stringify({ status: "completed" }));
-
         // フロントエンドにBufferに整形して返す
         res.set("Content-Type", "audio/wav");
         res.send(Buffer.from(voicevoxResult));
         
     } catch (error) {
-        clearInterval(interval);
         res.status(500).json({ error: "リクエストに失敗しました" });
         console.log("fetch全体で何らかのエラ―:", error.message);
     }
