@@ -1,11 +1,11 @@
 @font-face {
     font-family: "myfont";
-    src: url(./fonts/GenJyuuGothic-Heavy.ttf) format("truetype");
+    src: url(./fonts/GenJyuuGothic-Heavy.woff) format("woff");
     font-weight: bold;
 }
 @font-face {
     font-family: "myfont";
-    src: url(./fonts/GenJyuuGothic-Medium.ttf) format("truetype");
+    src: url(./fonts/GenJyuuGothic-Medium.woff) format("woff");
     font-weight: normal;
 }
 
