@@ -59,7 +59,7 @@ async function askButtonClicked(input) {
                 input += "について議論して下さい。議論をしていく上で、同じ文章は会話内で繰り返さないでください。何か聞き返したり、反論したりと、常に進展を持たせる内容にしてください。"
             }
             
-            const gemini = await fetch("../gemini", {
+            const gemini = await fetch("../api/gemini", {
                 method: "POST",
                 headers: {
                     "Content-Type": "text/plain",
@@ -71,7 +71,7 @@ async function askButtonClicked(input) {
             outputText.innerHTML += "<br><div class='geminiDebate'>" + geminiText + "</div>";
 
         } else {
-            const cohere = await fetch("../cohere", {
+            const cohere = await fetch("../api/cohere", {
                 method: "POST",
                 headers: {
                     "Content-Type": "text/plain",
@@ -92,9 +92,9 @@ async function askButtonClicked(input) {
         // アクセス先指定
         let endPointURL = null;
         if(useLocalApi.checked) {
-            endPointURL = "../local/voicevox";
+            endPointURL = "../api/local/voicevox";
         } else {
-            endPointURL = "../voicevox";
+            endPointURL = "../api/voicevox";
         }
         // 音声生成
         let bodyText = null;
