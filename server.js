@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 // 起動サーバーのルート指定
-app.use("/", express.static(path.join(__dirname, "../public")));
+app.use("/", express.static(path.join(__dirname, "public")));
 
 // ポート起動
 app.listen(PORT, () => {
