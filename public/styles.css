@@ -159,6 +159,10 @@ textarea:focus {
         accent-color: indianred;
 }
 
+#useLocalApiText:disabled {
+    color: #eee;
+}
+
 .loading {
     display: flex;
     align-items: center;

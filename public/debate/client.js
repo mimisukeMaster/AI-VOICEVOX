@@ -4,6 +4,7 @@ const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
 const characterID = document.getElementById("character")
 const useLocalApi = document.getElementById("useLocalApi");
+const useLocalApiText = document.getElementById("useLocalApiText");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 const debateFinish = document.getElementById("debateFinish");
@@ -32,6 +33,11 @@ debateFinish.addEventListener("click", () => {
     finishingText.innerText = "今のターンで終了します";
     finishing.style.display = "inline-block";
 });
+
+if(window.location.hostname !== "localhost"){
+    useLocalApi.disabled = true;
+    useLocalApiText.innerHTML = `<span title='ローカル環境でのみ使用できます'>${useLocalApiText.innerHTML}</span>`;
+} 
 
 async function askButtonClicked(input) {
     

@@ -2,6 +2,7 @@ const askButton = document.getElementById("askButton");
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
 const useLocalApi = document.getElementById("useLocalApi");
+const useLocalApiText = document.getElementById("useLocalApiText");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 
@@ -19,6 +20,11 @@ inputText.addEventListener("keydown", (event) => {
         askButtonClicked(inputText.value);
     }
 });
+
+if(window.location.hostname !== "localhost"){
+    useLocalApi.disabled = true;
+    useLocalApiText.innerHTML = `<span title='ローカル環境でのみ使用できます'>${useLocalApiText.innerHTML}</span>`;
+} 
 
 async function askButtonClicked(input) {
     
