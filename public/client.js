@@ -58,7 +58,9 @@ async function askButtonClicked(input) {
         
         // 音声生成
         // ストリーミング版
-        var speaker = 3;
+        const speaker = 3;
+        const speed = 1.2;
+        const intonationScale = 0.8;
         const apiKeyRes = await fetch(endPointURL, {
             method: "POST",
             headers: {
@@ -66,7 +68,7 @@ async function askButtonClicked(input) {
             },
         });
         const apiKey =  await apiKeyRes.text();
-        var audio = new TtsQuestV3Voicevox(speaker, geminiText, apiKey)
+        const audio = new TtsQuestV3Voicevox(speaker, geminiText, speed, intonationScale, apiKey)
 
         audio.play();
 

@@ -1,10 +1,12 @@
 class TtsQuestV3Voicevox extends Audio {
-    constructor(speakerId, text, apiKey) {
+    constructor(speakerId, text, speed, intonationScale, apiKey) {
         super();
         var params = {};
         params['key'] = apiKey;
         params['speaker'] = speakerId;
         params['text'] = text;
+        params['speed'] = speed;
+        params['intonationScale'] = intonationScale;
         const query = new URLSearchParams(params);
         this.#main(this, query);
     }

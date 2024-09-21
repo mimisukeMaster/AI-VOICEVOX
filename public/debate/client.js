@@ -106,7 +106,24 @@ async function askButtonClicked(input) {
             bodyText = cohereText;
             speakerID = characterID.value;
         }
-        const voicevox = await fetch(endPointURL, {
+
+        // ストリーミング版
+        const speed = 1.2;
+        const intonationScale = 0.8;
+        const apiKeyRes = await fetch(endPointURL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain",
+            },
+        });
+        const apiKey =  await apiKeyRes.text();
+
+        const audio = new TtsQuestV3Voicevox(speakerID, bodyText, speed, intonationScale, apiKey)
+
+        audio.play();
+
+
+        /*const voicevox = await fetch(endPointURL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -128,6 +145,7 @@ async function askButtonClicked(input) {
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
         
+        */
         // 再呼び出し
         audio.addEventListener("ended", () => {  
             if (isFinish) {
@@ -140,11 +158,11 @@ async function askButtonClicked(input) {
             }
         });
         audio.play();
-
+        /*
         // 使い終わったらURLを解放 メモリリーク防ぐ
         audio.onended = () => {
             URL.revokeObjectURL(audioUrl);
-        };
+        };*/
 
     } catch (error){
     console.error("エラー: ", error);
