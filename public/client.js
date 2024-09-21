@@ -27,7 +27,7 @@ async function askButtonClicked(input) {
         loadingText.style.display = "inline-block";
         dotsText.style.display = "inline-block";
         loadingText.innerText = "考え中";
-
+        
         // 文章を送るのでstring型でPOST送信
         const geminiRes = await fetch("/api/gemini", {
             method: "POST",
@@ -44,10 +44,10 @@ async function askButtonClicked(input) {
         console.log("client.jsからGeminiにfetch")
         const geminiText = await geminiRes.text();
         outputText.innerText = geminiText;
-
+        
         // ローディング表示変更
         loadingText.innerText = "発声準備中";
-
+        
         // アクセス先指定
         let endPointURL = null;
         if(useLocalApi.checked) {
@@ -57,50 +57,56 @@ async function askButtonClicked(input) {
         }
         
         // 音声生成
-        // ストリーミング版
-        const speaker = 3;
-        const speed = 1.2;
-        const intonationScale = 0.8;
-        const apiKeyRes = await fetch(endPointURL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "text/plain",
-            },
-        });
-        const apiKey =  await apiKeyRes.text();
-        const audio = new TtsQuestV3Voicevox(speaker, geminiText, speed, intonationScale, apiKey)
+        if(window.location.hostname === "localhost") {
+            console.log("locakhostでデプロイされています")
+            // ローカル環境では高速版を使う
+            const voicevoxRes = await fetch(endPointURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    text: geminiText,
+                    speaker: "3"
+                })
+            });
+            
+            if (!voicevoxRes.ok) {
+                throw new Error("サーバーとの通信に失敗しました");
+            }
+            
+            // 音声データをバイナリとして取得
+            const audioBlob = await voicevoxRes.blob();
+            
+            // 音声データを再生
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.play();
+            
+            // 使い終わったらURLを解放 メモリリーク防ぐ
+            audio.onended = () => {
+                URL.revokeObjectURL(audioUrl);
+            };
+        } else {
 
-        audio.play();
-
-        /*const voicevoxRes = await fetch(endPointURL, {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                text: geminiText,
-                speaker: "3"
-            })
-        });
-
-        if (!voicevoxRes.ok) {
-            throw new Error("サーバーとの通信に失敗しました");
+            // それ以外(Vercel)ではストリーミング版を使う
+            console.log("Vercelでデプロイされています");
+            const speaker = 3;
+            const speed = 1.2;
+            const intonationScale = 0.8;
+            const apiKeyRes = await fetch(endPointURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain",
+                },
+            });
+            const apiKey =  await apiKeyRes.text();
+            
+            // ストリーミング合成
+            const audio = new TtsQuestV3Voicevox(speaker, geminiText, speed, intonationScale, apiKey)
+            
+            audio.play();
         }
-
-        // 音声データをバイナリとして取得
-        const audioBlob = await voicevoxRes.blob();
-        
-        // 音声データを再生
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audio = new Audio(audioUrl);
-        audio.play();
-        
-        // 使い終わったらURLを解放 メモリリーク防ぐ
-        audio.onended = () => {
-            URL.revokeObjectURL(audioUrl);
-        };
-        */
-
     } catch (error){
     console.error("エラー: ", error);
     

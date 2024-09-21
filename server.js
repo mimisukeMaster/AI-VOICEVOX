@@ -86,33 +86,39 @@ app.post("/api/cohere", async (req, res) => {
 
 /* VOICEVOX用 HTTP POST */
 app.post("/api/voicevox", async (req, res) => {
-
-    // ストリーミング版
-    // APIキーを返す
-    res.send(process.env.VOICEVOX_API_KEY); 
-    /*
     // 音声データを作って返す
-    const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
-    const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
-    const intonationScale = 0.7;
-    const speed = 1.2;
-    try {
-        const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${req.body.speaker}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body.text}`);
+    const host = req.hostname || req.get("host");
+    if (host .includes("localhost")){
+
+        // ローカル環境では高速版を使い合成
+        console.log("ローカル環境でデプロイされたバックエンドです");
+        const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
+        const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
+        const intonationScale = 0.7;
+        const speed = 1.2;
+        try {
+            const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${req.body.speaker}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body.text}`);
             if (!response.ok) {
                 throw new Error("音声生成に失敗しました", response);
             }
 
-        // 音声バイナリを受け取る
-        const voicevoxResult = await response.arrayBuffer();
-        
-        // フロントエンドにBufferに整形して返す
-        res.set("Content-Type", "audio/wav");
-        res.send(Buffer.from(voicevoxResult));
-        
-    } catch (error) {
-        res.status(500).json({ error: "リクエストに失敗しました" });
-        console.log("fetch全体で何らかのエラ―:", error.message);
-    }*/
+            // 音声バイナリを受け取る
+            const voicevoxResult = await response.arrayBuffer();
+
+            // フロントエンドにBufferに整形して返す
+            res.set("Content-Type", "audio/wav");
+            res.send(Buffer.from(voicevoxResult));
+
+        } catch (error) {
+            res.status(500).json({ error: "リクエストに失敗しました" });
+            console.log("fetch全体で何らかのエラ―:", error.message);
+        }
+
+    } else {
+        // それ以外(Vercel)ではストリーミング版を使うので APIキーを返す
+        console.log("Vercelでデプロイされたバックエンドです");
+        res.send(process.env.VOICEVOX_API_KEY); 
+    }
 });
 
 /* ローカル版 VOICEVOX用 HTTP POST */
