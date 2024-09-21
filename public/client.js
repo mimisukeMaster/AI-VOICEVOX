@@ -36,7 +36,6 @@ async function askButtonClicked(input) {
             },
             body: input,
         });
-        console.log(geminiRes.url);
         if (!geminiRes.ok) {
             const text = await geminiRes.text();
             throw new Error(`HTTP error! Status: ${geminiRes.status}, Message: ${text}`);
@@ -58,7 +57,20 @@ async function askButtonClicked(input) {
         }
         
         // 音声生成
-        const voicevoxRes = await fetch(endPointURL, {
+        // ストリーミング版
+        var speaker = 3;
+        const apiKeyRes = await fetch(endPointURL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain",
+            },
+        });
+        const apiKey =  await apiKeyRes.text();
+        var audio = new TtsQuestV3Voicevox(speaker, geminiText, apiKey)
+
+        audio.play();
+
+        /*const voicevoxRes = await fetch(endPointURL, {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
@@ -80,11 +92,12 @@ async function askButtonClicked(input) {
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
         audio.play();
-
+        
         // 使い終わったらURLを解放 メモリリーク防ぐ
         audio.onended = () => {
             URL.revokeObjectURL(audioUrl);
         };
+        */
 
     } catch (error){
     console.error("エラー: ", error);

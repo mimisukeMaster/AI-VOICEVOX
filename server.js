@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-require("dotenv").config()
+require("dotenv").config();
 const app = express();
 const PORT = 3000;
 
@@ -22,7 +22,6 @@ app.listen(PORT, () => {
 
 /* Gemini用 HTTP POST */
 app.post("/api/gemini", async (req, res) => {
-    console.log(req.url  + ", full path: " + req.originalUrl);
     console.log("server.jsからgeminiAPI叩く")
     // GeminiAPIの準備 Keyは.envから取得
     const {
@@ -88,6 +87,10 @@ app.post("/api/cohere", async (req, res) => {
 /* VOICEVOX用 HTTP POST */
 app.post("/api/voicevox", async (req, res) => {
 
+    // ストリーミング版
+    // APIキーを返す
+    res.send(process.env.VOICEVOX_API_KEY); 
+    /*
     // 音声データを作って返す
     const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
     const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
@@ -109,7 +112,7 @@ app.post("/api/voicevox", async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: "リクエストに失敗しました" });
         console.log("fetch全体で何らかのエラ―:", error.message);
-    }
+    }*/
 });
 
 /* ローカル版 VOICEVOX用 HTTP POST */
