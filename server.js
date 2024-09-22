@@ -22,7 +22,7 @@ app.listen(PORT, () => {
 
 /* Gemini用 HTTP POST */
 app.post("/api/gemini", async (req, res) => {
-    console.log("server.jsからgeminiAPI叩く")
+
     // GeminiAPIの準備 Keyは.envから取得
     const {
         GoogleGenerativeAI,
@@ -86,12 +86,11 @@ app.post("/api/cohere", async (req, res) => {
 
 /* VOICEVOX用 HTTP POST */
 app.post("/api/voicevox", async (req, res) => {
-    // 音声データを作って返す
+
     const host = req.hostname || req.get("host");
     if (host .includes("localhost")){
 
         // ローカル環境では高速版を使い合成
-        console.log("ローカル環境でデプロイされたバックエンドです");
         const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
         const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
         const intonationScale = 0.7;
@@ -116,7 +115,6 @@ app.post("/api/voicevox", async (req, res) => {
 
     } else {
         // それ以外(Vercel)ではストリーミング版を使うので APIキーを返す
-        console.log("Vercelでデプロイされたバックエンドです");
         res.send(process.env.VOICEVOX_API_KEY); 
     }
 });
@@ -124,7 +122,6 @@ app.post("/api/voicevox", async (req, res) => {
 /* ローカル版 VOICEVOX用 HTTP POST */
 app.post("/api/local/voicevox", async (req, res) => {
 
-    /* 音声データを作って返す */
     const apiUrl = "https://localhost:50021";
     const speakerID = 3;  // 話者ID（3: ずんだもん）
     const intonationScale = 0.7;

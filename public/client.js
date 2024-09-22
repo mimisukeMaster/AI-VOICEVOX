@@ -47,7 +47,6 @@ async function askButtonClicked(input) {
             throw new Error(`HTTP error! Status: ${geminiRes.status}, Message: ${text}`);
         }
         
-        console.log("client.jsからGeminiにfetch")
         const geminiText = await geminiRes.text();
         outputText.innerText = geminiText;
         
@@ -64,7 +63,7 @@ async function askButtonClicked(input) {
         
         // 音声生成
         if(window.location.hostname === "localhost") {
-            console.log("locakhostでデプロイされています")
+
             // ローカル環境では高速版を使う
             const voicevoxRes = await fetch(endPointURL, {
                 method: "POST",
@@ -96,7 +95,6 @@ async function askButtonClicked(input) {
         } else {
 
             // それ以外(Vercel)ではストリーミング版を使う
-            console.log("Vercelでデプロイされています");
             const speaker = 3;
             const speed = 1.2;
             const intonationScale = 0.8;
@@ -109,7 +107,7 @@ async function askButtonClicked(input) {
             const apiKey =  await apiKeyRes.text();
             
             // ストリーミング合成
-            const audio = new TtsQuestV3Voicevox(speaker, geminiText, speed, intonationScale, apiKey)
+            const audio = new TtsQuestV3Voicevox(speaker, geminiText, speed, intonationScale, apiKey);
             
             audio.play();
         }

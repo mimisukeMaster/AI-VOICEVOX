@@ -13,6 +13,9 @@ const finishing = document.getElementById("finishing")
 let orderInt = 0;
 let isFinish = false;
 
+let geminiText = null;
+let cohereText = null;
+
 inputText.addEventListener("input", () => {
     if (inputText.value.trim() === "") debateButton.disabled = true;
     else debateButton.disabled = false;
@@ -50,9 +53,6 @@ async function askButtonClicked(input) {
         // 終了ボタン有効化
         debateFinish.disabled = false;
         
-        // response用変数
-        let geminiText = null;
-        let cohereText = null;
         
         // バックへPOSTメッセージを送る
         // POSTメッセージは質問文を送るのでstring型を指定する
@@ -143,10 +143,14 @@ async function askButtonClicked(input) {
             audio.onended = () => {
                 URL.revokeObjectURL(audioUrl);
             };
+
+            // 再呼び出し
+            audio.addEventListener("ended", () => { 
+                remarkEnded();
+            });
         } else {
 
             // それ以外(Vercel)ではストリーミング版を使う
-            console.log("Vercelで実行しているフロントエンドです");
             const speed = 1.2;
             const intonationScale = 0.8;
             const apiKeyRes = await fetch(endPointURL, {
@@ -156,28 +160,17 @@ async function askButtonClicked(input) {
                 },
             });
             const apiKey =  await apiKeyRes.text();
-            
-            const audio = new TtsQuestV3Voicevox(speakerID, bodyText, speed, intonationScale, apiKey)
-            
+            const audio = new TtsQuestV3Voicevox(speakerID, bodyText, speed, intonationScale, apiKey);        
             audio.play();
-        }
 
-        // 再呼び出し
-        audio.addEventListener("ended", () => {  
-            if (isFinish) {
-                debateFinishProcess();
-                return;
-            } else if (orderInt % 2 !== 0) {
-                askButtonClicked(geminiText);
-            } else {
-                askButtonClicked(cohereText);
-            }
-        });
-        
-
+            // 再呼び出し
+            audio.addEventListener("ended", () => { 
+                remarkEnded();
+            });
+        }  
     } catch (error){
-    console.error("エラー: ", error);
-    
+        console.error("エラー: ", error);
+        
     } finally {
         // Loading表示を非表示にする
         loadingText.style.display = "none";
@@ -185,10 +178,20 @@ async function askButtonClicked(input) {
     }
 }
 
-function debateFinishProcess() {
-    isFinish = false;
-    orderInt = 0;
-    finishingText.innerText = "";
-    finishing.style.display = "none"
-    debateFinish.disabled = true;
+function remarkEnded() {
+
+    // 討論終了フラグ有効時
+    if (isFinish) {
+        isFinish = false;
+        orderInt = 0;
+        finishingText.innerText = "";
+        finishing.style.display = "none"
+        debateFinish.disabled = true;
+        return;
+
+    } else if (orderInt % 2 !== 0) {
+        askButtonClicked(geminiText);
+    } else {
+        askButtonClicked(cohereText);
+    }
 }
