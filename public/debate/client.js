@@ -144,6 +144,14 @@ async function askButtonClicked(input) {
                 URL.revokeObjectURL(audioUrl);
             };
 
+            // 音声再生開始
+            audio.addEventListener("playing", () => {
+
+                // Loading表示を非表示にする
+                loadingText.style.display = "none";
+                dotsText.style.display = "none";
+            });
+            
             // 再呼び出し
             audio.addEventListener("ended", () => { 
                 remarkEnded();
@@ -163,6 +171,14 @@ async function askButtonClicked(input) {
             const audio = new TtsQuestV3Voicevox(speakerID, bodyText, speed, intonationScale, apiKey);        
             audio.play();
 
+            // 音声再生開始
+            audio.addEventListener("playing", () => {
+
+                // Loading表示を非表示にする
+                loadingText.style.display = "none";
+                dotsText.style.display = "none";
+            });
+
             // 再呼び出し
             audio.addEventListener("ended", () => { 
                 remarkEnded();
@@ -171,10 +187,6 @@ async function askButtonClicked(input) {
     } catch (error){
         console.error("エラー: ", error);
         
-    } finally {
-        // Loading表示を非表示にする
-        loadingText.style.display = "none";
-        dotsText.style.display = "none";
     }
 }
 
