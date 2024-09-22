@@ -24,7 +24,7 @@
     <p class="loading"><button type="button" id="askButton" disabled>質問する！</button>
         <label class="checkbox-container">
             <input type="checkbox" id="useLocalApi">
-            <span title ="VOICEVOXソフトを起動しておく必要があります">ローカルのVOICEVOXを使う</span>
+            <span title ="VOICEVOXソフトを起動しておく必要があります" id ="useLocalApiText">ローカルのVOICEVOXを使う</span>
         </label>
         <span id="loading"></span><span id="dots"></span>
     </p>
@@ -33,7 +33,7 @@
     <p id="outputText">
         <!--このidを指定して回答が出力される-->
     </p>
-    
+    <script src="TtsQuestV3Voicevox.js"></script>
     <script src="client.js"></script>
 </body>
 </html>

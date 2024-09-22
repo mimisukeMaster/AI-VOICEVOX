@@ -1,6 +1,7 @@
 const express = require("express");
+const cors = require("cors");
 const path = require("path");
-require("dotenv").config()
+require("dotenv").config();
 const app = express();
 const PORT = 3000;
 
@@ -9,6 +10,7 @@ const PORT = 3000;
 // その型を受け付けられるようにする
 app.use(express.text());
 app.use(express.json());
+app.use(cors());
 
 // 起動サーバーのルート指定
 app.use("/", express.static(path.join(__dirname, "public")));
@@ -20,7 +22,7 @@ app.listen(PORT, () => {
 
 /* Gemini用 HTTP POST */
 app.post("/api/gemini", async (req, res) => {
-
+    console.log("server.jsからgeminiAPI叩く")
     // GeminiAPIの準備 Keyは.envから取得
     const {
         GoogleGenerativeAI,
@@ -84,28 +86,38 @@ app.post("/api/cohere", async (req, res) => {
 
 /* VOICEVOX用 HTTP POST */
 app.post("/api/voicevox", async (req, res) => {
-
     // 音声データを作って返す
-    const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
-    const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
-    const intonationScale = 0.7;
-    const speed = 1.2;
-    try {
-        const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${req.body.speaker}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body.text}`);
+    const host = req.hostname || req.get("host");
+    if (host .includes("localhost")){
+
+        // ローカル環境では高速版を使い合成
+        console.log("ローカル環境でデプロイされたバックエンドです");
+        const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
+        const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
+        const intonationScale = 0.7;
+        const speed = 1.2;
+        try {
+            const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${req.body.speaker}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body.text}`);
             if (!response.ok) {
                 throw new Error("音声生成に失敗しました", response);
             }
 
-        // 音声バイナリを受け取る
-        const voicevoxResult = await response.arrayBuffer();
-        
-        // フロントエンドにBufferに整形して返す
-        res.set("Content-Type", "audio/wav");
-        res.send(Buffer.from(voicevoxResult));
-        
-    } catch (error) {
-        res.status(500).json({ error: "リクエストに失敗しました" });
-        console.log("fetch全体で何らかのエラ―:", error.message);
+            // 音声バイナリを受け取る
+            const voicevoxResult = await response.arrayBuffer();
+
+            // フロントエンドにBufferに整形して返す
+            res.set("Content-Type", "audio/wav");
+            res.send(Buffer.from(voicevoxResult));
+
+        } catch (error) {
+            res.status(500).json({ error: "リクエストに失敗しました" });
+            console.log("fetch全体で何らかのエラ―:", error.message);
+        }
+
+    } else {
+        // それ以外(Vercel)ではストリーミング版を使うので APIキーを返す
+        console.log("Vercelでデプロイされたバックエンドです");
+        res.send(process.env.VOICEVOX_API_KEY); 
     }
 });
 
@@ -113,7 +125,7 @@ app.post("/api/voicevox", async (req, res) => {
 app.post("/api/local/voicevox", async (req, res) => {
 
     /* 音声データを作って返す */
-    const apiUrl = "http://localhost:50021";
+    const apiUrl = "https://localhost:50021";
     const speakerID = 3;  // 話者ID（3: ずんだもん）
     const intonationScale = 0.7;
     const speed = 1.2;
@@ -158,4 +170,6 @@ app.post("/api/local/voicevox", async (req, res) => {
         res.status(500).json({ error: "リクエストに失敗しました" });
         console.log("fetch全体で何らかのエラ―:", error.message);
     }
-});  
+});
+
+module.exports = app;

@@ -1,11 +1,11 @@
 @font-face {
     font-family: "myfont";
-    src: url(./fonts/GenJyuuGothic-Heavy.ttf) format("truetype");
+    src: url(./fonts/GenJyuuGothic-Heavy.woff2) format("woff2");
     font-weight: bold;
 }
 @font-face {
     font-family: "myfont";
-    src: url(./fonts/GenJyuuGothic-Medium.ttf) format("truetype");
+    src: url(./fonts/GenJyuuGothic-Medium.woff2) format("woff2");
     font-weight: normal;
 }
 
@@ -157,6 +157,10 @@ textarea:focus {
 
 .checkbox-container input:checked {
         accent-color: indianred;
+}
+
+#useLocalApiText:disabled {
+    color: #eee;
 }
 
 .loading {

@@ -4,6 +4,7 @@ const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
 const characterID = document.getElementById("character")
 const useLocalApi = document.getElementById("useLocalApi");
+const useLocalApiText = document.getElementById("useLocalApiText");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 const debateFinish = document.getElementById("debateFinish");
@@ -32,6 +33,11 @@ debateFinish.addEventListener("click", () => {
     finishingText.innerText = "今のターンで終了します";
     finishing.style.display = "inline-block";
 });
+
+if(window.location.hostname !== "localhost"){
+    useLocalApi.disabled = true;
+    useLocalApiText.innerHTML = `<span title='ローカル環境でのみ使用できます'>${useLocalApiText.innerHTML}</span>`;
+} 
 
 async function askButtonClicked(input) {
     
@@ -106,28 +112,56 @@ async function askButtonClicked(input) {
             bodyText = cohereText;
             speakerID = characterID.value;
         }
-        const voicevox = await fetch(endPointURL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                text: bodyText,
-                speaker: speakerID
-            })
-        });
-        
-        if (!voicevox.ok) {
-            throw new Error("サーバーとの通信に失敗しました");
+
+        if(window.location.hostname === "localhost") {
+            
+            // ローカル環境では高速版を使う
+            const voicevox = await fetch(endPointURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    text: bodyText,
+                    speaker: speakerID
+                })
+            });
+            
+            if (!voicevox.ok) {
+                throw new Error("サーバーとの通信に失敗しました");
+            }
+            
+            // 音声データをバイナリとして取得
+            const audioBlob = await voicevox.blob();
+            
+            // 音声データを再生
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.play();
+            
+            // 使い終わったらURLを解放 メモリリーク防ぐ
+            audio.onended = () => {
+                URL.revokeObjectURL(audioUrl);
+            };
+        } else {
+
+            // それ以外(Vercel)ではストリーミング版を使う
+            console.log("Vercelで実行しているフロントエンドです");
+            const speed = 1.2;
+            const intonationScale = 0.8;
+            const apiKeyRes = await fetch(endPointURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain",
+                },
+            });
+            const apiKey =  await apiKeyRes.text();
+            
+            const audio = new TtsQuestV3Voicevox(speakerID, bodyText, speed, intonationScale, apiKey)
+            
+            audio.play();
         }
-        
-        // 音声データをバイナリとして取得
-        const audioBlob = await voicevox.blob();
-        
-        // 音声データを再生
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audio = new Audio(audioUrl);
-        
+
         // 再呼び出し
         audio.addEventListener("ended", () => {  
             if (isFinish) {
@@ -139,12 +173,7 @@ async function askButtonClicked(input) {
                 askButtonClicked(cohereText);
             }
         });
-        audio.play();
-
-        // 使い終わったらURLを解放 メモリリーク防ぐ
-        audio.onended = () => {
-            URL.revokeObjectURL(audioUrl);
-        };
+        
 
     } catch (error){
     console.error("エラー: ", error);
