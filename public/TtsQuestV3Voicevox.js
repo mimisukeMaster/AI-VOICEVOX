@@ -16,7 +16,13 @@ class TtsQuestV3Voicevox extends Audio {
 
         var apiUrl = 'https://api.tts.quest/v3/voicevox/synthesis';
         fetch(apiUrl + '?' + query.toString())
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 429) {
+                alert("リクエストが多すぎます。数秒してから再度お試しください。");
+                throw new Error("429 Too many requests");
+            }
+            return response.json();
+        })
         .then(response => {
             if (typeof response.retryAfter !== 'undefined') {
             setTimeout(owner.#main, 1000 * (1 + response.retryAfter), owner, query);
