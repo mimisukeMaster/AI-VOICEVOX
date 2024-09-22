@@ -3,8 +3,10 @@
 [<img src="https://img.shields.io/badge/issues-welcome-green">](https://github.com/mimisukeMaster/GeminiVoicevox/issues)
 [<img src="https://img.shields.io/badge/PRs-welcome-orange?logo=git">](https://github.com/mimisukeMaster/OsakanaFlock/pulls)
 [<img  src="https://img.shields.io/hexpm/l/plug?color=red&logo=apache">](https://www.apache.org/licenses/)<br>
+[<img src="https://img.shields.io/badge/deployed%20to-Vercel-brightgreen?logo=vercel">](https://github.com/mimisukeMaster/GeminiVoicevox/deployments)
 <img src="https://img.shields.io/github/repo-size/mimisukeMaster/GeminiVoicevox?logo=gitlfs&color=ff69b4">
-[<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc">](https://open.vscode.dev/mimisukeMaster/GeminiVoicevox)
+[<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&style=flat">](https://open.vscode.dev/mimisukeMaster/GeminiVoicevox)
+
 
 ユーザーの質問をGeminiAPIにより回答し、VOICEVOXのAPIで読み上げるWebアプリです。追加の機能を実装中です。
 
@@ -12,7 +14,7 @@
 `npm`が効く環境で、以下のコマンドを実行して[package.json](/package.json)に記載されたパッケージをインストールしてください。
 ```cmd
 npm install
-(自機はnodejs-22.7.0で実行)
+(自機は nodejs v22.7.0, npm v10.8.2 で実行)
 ```
 以下のパッケージがインストールされます。
 ```cmd
@@ -23,9 +25,11 @@ npm install
 ```
 
 ## Directory
+主要部のみ
 ```
 GeminiVoicevox
 │  .env (作成してください)
+│  vercel.json
 │  server.js
 └─ public
    │
@@ -33,18 +37,19 @@ GeminiVoicevox
    │  └─ index.html
    │
    ├─ debate
-   │  │  client.js
    │  │  index.html
-   │  └─ styles.css
-   │
-   │  client.js
+   │  └─ client.js
+   │ 
    │  index.html
-   └─ styles.css
-
+   │  client.js
+   │  styles.css
+   └─ TtsQuestV3Voicevox.js
 ```
 **server.js**: バックエンド処理
 
 **client.js**: フロントエンド処理
+
+**TtsQuestV3Voicevox.js**: ストリーミング版の音声合成処理
 
 **public**: http://localhost:3000 接続時のルートにあたる箇所
 
@@ -72,7 +77,7 @@ Server started on port:3000
 ```
 ### AI豆打者
 http://localhost:3000/<br>
-メインページです。質問文をバックエンドに送り、GeminiAPIを呼んだ後、レスポンスをVOICEVOXで読み上げています。
+メインページです。質問文をバックエンドに送り、GeminiAPIを呼んだ後、レスポンスをVOICEVOXで読み上げています。ローカルでの音声合成は全て[高速版](https://voicevox.su-shiki.com/su-shikiapis/)で処理されます。
 
 「ローカルAPIを使う」にチェックを入れた場合、ローカルのVOICEVOX Engineを利用します。別途、VOICEVOXソフトを起動しておいてください。
 
@@ -84,6 +89,16 @@ http://localhost:3000/<br>
 
 こちらも、「ローカルAPIを使う」にチェックを入れた場合VOICEVOXソフトを起動してから「討論開始！」ボタンを押してください。
 
+## Demo
+Vercel上でデプロイしており、そちらから仕様を確認できます。
+
+https://gemini-voicevox.vercel.app/
+
+- コミット時にこのドメインに再デプロイされますが、更新が遅れる場合があります。
+- 「ローカルのVOIEVOXを使う」は、Vercel上で動かしているため使用できません。
+- 音声合成は全て[ストリーミング版](https://github.com/ts-klassen/ttsQuestV3Voicevox)で処理されます。これは、合成に時間がかかる際のタイムアウトを防ぐためです。
+- 数秒間隔で合成処理を行うと、ストリーミング版の制限として`429 Too many requests`が返される場合があります。その際は数十秒程度おいて再度試してください。
+- ローカルでの実行時と比べ一部異なる場合、コミットのDescriptionにその旨を記します。
 
 ## Reference
 VOICEVOX API Key 取得先と解説記事
@@ -93,6 +108,9 @@ VOICEVOX API Key 取得先と解説記事
 
 GeminiAPI Key 取得先
 - https://aistudio.google.com/app/apikey
+
+cohere API Key 取得先
+- https://dashboard.cohere.com/api-keys
 
 ## Author
  みみすけ名人 mimisukeMaster<br>
