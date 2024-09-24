@@ -13,6 +13,7 @@ body {
     margin: 0;
     background-color:ghostwhite;
     font-family: "myfont";
+    overflow-x: hidden;
 }
 
 nav {
