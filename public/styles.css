@@ -70,6 +70,9 @@ option {
 }
 
 textarea {
+    width: 90%;
+    box-sizing: border-box;
+    min-height: 200px; 
     border-radius: 10px;
     border-width: 3px;
     padding: 5px;
