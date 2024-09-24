@@ -1,5 +1,5 @@
 {
-    "name": "gemini-voicevox-server",
+    "name": "ai-voicevox-server",
     "version": "1.0.0",
     "main": "server.js",
     "scripts": {

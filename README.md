@@ -1,11 +1,11 @@
-# GeminiVoicevox
-[<img src="https://img.shields.io/github/stars/mimisukeMaster/GeminiVoicevox?&logo=github">](https://github.com/mimisukeMaster/GeminiVoicevox/stargazers)
-[<img src="https://img.shields.io/badge/issues-welcome-green">](https://github.com/mimisukeMaster/GeminiVoicevox/issues)
+# AI-VOICEVOX
+[<img src="https://img.shields.io/github/stars/mimisukeMaster/AI-VOICEVOX?&logo=github">](https://github.com/mimisukeMaster/AI-VOICEVOX/stargazers)
+[<img src="https://img.shields.io/badge/issues-welcome-green">](https://github.com/mimisukeMaster/AI-VOICEVOX/issues)
 [<img src="https://img.shields.io/badge/PRs-welcome-orange?logo=git">](https://github.com/mimisukeMaster/OsakanaFlock/pulls)
 [<img  src="https://img.shields.io/hexpm/l/plug?color=red&logo=apache">](https://www.apache.org/licenses/)<br>
-[<img src="https://img.shields.io/badge/deployed%20to-Vercel-brightgreen?logo=vercel">](https://github.com/mimisukeMaster/GeminiVoicevox/deployments)
-<img src="https://img.shields.io/github/repo-size/mimisukeMaster/GeminiVoicevox?logo=gitlfs&color=ff69b4">
-[<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&style=flat">](https://open.vscode.dev/mimisukeMaster/GeminiVoicevox)
+[<img src="https://img.shields.io/badge/deployed%20to-Vercel-brightgreen?logo=vercel">](https://github.com/mimisukeMaster/AI-VOICEVOX/deployments)
+<img src="https://img.shields.io/github/repo-size/mimisukeMaster/AI-VOICEVOX?logo=gitlfs&color=ff69b4">
+[<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&style=flat">](https://open.vscode.dev/mimisukeMaster/AI-VOICEVOX)
 
 
 ユーザーの質問をGeminiAPIにより回答し、VOICEVOXのAPIで読み上げるWebアプリです。追加の機能を実装中です。
@@ -27,7 +27,7 @@ npm install
 ## Directory
 主要部のみ
 ```
-GeminiVoicevox
+AI-VOICEVOX
 │  .env (作成してください)
 │  vercel.json
 │  server.js
@@ -120,4 +120,4 @@ cohere API Key 取得先
 [<img src="https://img.shields.io/badge/-Youtube-youtube.svg?&style=flat-square&logo=youtube&logoColor=white&color=red">](https://www.youtube.com/channel/UCWnmp8t4GJzcjBxhtgo9rKQ)
 
 ## LICENCE
-GeminiVoicevox is under [Apache-2.0 licence](/LICENSE).
+AI-VOICEVOX is under [Apache-2.0 licence](/LICENSE).
