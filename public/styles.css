@@ -104,8 +104,6 @@ textarea:focus {
     color: white;
     box-shadow: 1px 1px #333333;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 #askButton:hover {
@@ -132,9 +130,8 @@ textarea:focus {
     color: white;
     box-shadow: 1px 1px #333333;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
+
 #debateButton:hover {
     transition: background-color 0.2s;
     background-color:seagreen;
@@ -173,8 +170,6 @@ textarea:focus {
     margin-left: 10px;
     font-size: 20px;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 #dots {
