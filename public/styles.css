@@ -70,7 +70,7 @@ option {
     cursor: pointer;
 }
 
-textarea {
+.public {
     width: 90%;
     box-sizing: border-box;
     min-height: 170px; 
@@ -79,6 +79,16 @@ textarea {
     padding: 5px;
     box-shadow: 5px 5px 3px #333333;
 }
+
+.debate {
+    width: 60%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border-width: 3px;
+    padding: 5px;
+    box-shadow: 5px 5px 3px #333333;
+}
+
 
 textarea:focus {
     border-color: black;
