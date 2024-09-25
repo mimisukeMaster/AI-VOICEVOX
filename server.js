@@ -53,9 +53,9 @@ app.post("/api/gemini", async (req, res) => {
 
     // 実際にプロンプト文を送信して返答を代入
     const geminiResult = await chatSession.sendMessage(req.body + 
-        "/ただし、回答は必ず200文字以内にし、会話として成立するように同じ内容を繰り返さず、常に展開させることを意識してください。回答は口語体にして、記号は「。、！？」のみ使えます。これら以外の記号(マークダウン用も含む)を使わないで下さい。");
-    
-    res.send(geminiResult.response.text());
+        "/ただし、回答は300文字以内にして、使用できる記号は「。、！？」のみで、他(マークダウン用も含む)は使わないで下さい。口語体にして、常に話を展開させることを意識してください。");
+    const filteredText = geminiResult.response.text().replace(/[<>*:;]/g,"");
+    res.send(filteredText);
 });
 
 /* cohere用 HTTP POST */
@@ -72,10 +72,10 @@ app.post("/api/cohere", async (req, res) => {
         // チャットリクエストを送信する
         const cohereResult = await cohere.chat({
             model: "command-r-plus",
-            message: req.body + "回答は必ず200文字以内にし、話しかける口調にして、「。、！？」以外の記号(マークダウン用も含む)を使わないで下さい。",
+            message: req.body + "/ただし、回答は300文字以内にして、使用できる記号は「。、！？」のみで、他(マークダウン用も含む)は使わないで下さい。口語体にして、常に話を展開させることを意識してください。",
         });
-
-        res.send(cohereResult.text);
+        const filteredText = cohereResult.text.replace(/[<>*:;]/g,"");
+        res.send(filteredText);
 
     } catch (error) {
         // エラーハンドリング
@@ -88,7 +88,7 @@ app.post("/api/cohere", async (req, res) => {
 app.post("/api/voicevox", async (req, res) => {
 
     const host = req.hostname || req.get("host");
-    if (host .includes("localhost")){
+    if (host.includes("localhost")){
 
         // ローカル環境では高速版を使い合成
         const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";

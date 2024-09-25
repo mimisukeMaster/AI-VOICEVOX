@@ -49,8 +49,12 @@ async function askButtonClicked(input) {
         loadingText.style.display = "inline-block";
         dotsText.style.display = "inline-block";
         loadingText.innerText = "考え中";
+
+        // 内容リセット
+        outputText.innerHTML = "";
         
-        // 終了ボタン有効化
+        // ボタン制御
+        debateButton.disabled = true;
         debateFinish.disabled = false;
         
         
@@ -198,6 +202,7 @@ function remarkEnded() {
         orderInt = 0;
         finishingText.innerText = "";
         finishing.style.display = "none"
+        debateButton.disabled = false;
         debateFinish.disabled = true;
         return;
 
