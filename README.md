@@ -8,7 +8,7 @@
 [<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&style=flat">](https://open.vscode.dev/mimisukeMaster/AI-VOICEVOX)
 
 
-ユーザーの質問をGeminiAPIにより回答し、VOICEVOXのAPIで読み上げるWebアプリです。追加の機能を実装中です。
+GeminiやcohereなどのLLMを使用し、質問に答えたり、LLM同士で対話させることができるWebアプリです。全ての返答はVOICEVOXによりリアルタイムで音声合成され、読み上げられます。
 
 ## Requirements
 `npm`が効く環境で、以下のコマンドを実行して[package.json](/package.json)に記載されたパッケージをインストールしてください。
@@ -77,7 +77,7 @@ Server started on port:3000
 ```
 ### AI豆打者
 http://localhost:3000/<br>
-メインページです。質問文をバックエンドに送り、GeminiAPIを呼んだ後、レスポンスをVOICEVOXで読み上げています。ローカルでの音声合成は全て[高速版](https://voicevox.su-shiki.com/su-shikiapis/)で処理されます。
+対話形式で質問ができます。質問文をバックエンドに送り、GeminiAPIを呼んだ後、レスポンスをVOICEVOXで読み上げています。ローカルでの音声合成は全て[高速版](https://voicevox.su-shiki.com/su-shikiapis/)で処理されます。2回目以降の質問は、前回の質問が背景情報として保持されるわけではないので注意してください。
 
 「ローカルAPIを使う」にチェックを入れた場合、ローカルのVOICEVOX Engineを利用します。別途、VOICEVOXソフトを起動しておいてください。
 
