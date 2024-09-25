@@ -23,11 +23,13 @@ inputText.addEventListener("input", () => {
 
 debateButton.addEventListener("click", () => {
     askButtonClicked(inputText.value);
+    outputText.innerHTML = "";
 });
 
 inputText.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.key === "Enter") {
         askButtonClicked(inputText.value);
+        outputText.innerHTML = "";
     }
 });
 
@@ -50,8 +52,6 @@ async function askButtonClicked(input) {
         dotsText.style.display = "inline-block";
         loadingText.innerText = "考え中";
 
-        // 内容リセット
-        outputText.innerHTML = "";
         
         // ボタン制御
         debateButton.disabled = true;
