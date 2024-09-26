@@ -96,8 +96,6 @@ async function askButtonClicked(input) {
 
             // それ以外(Vercel)ではストリーミング版を使う
             const speaker = 3;
-            const speed = 1.2;
-            const intonationScale = 0.8;
             const apiKeyRes = await fetch(endPointURL, {
                 method: "POST",
                 headers: {
@@ -105,14 +103,15 @@ async function askButtonClicked(input) {
                 },
             });
             const apiKey =  await apiKeyRes.text();
+            const audio = new TtsQuestV3Voicevox(speaker, geminiText, apiKey);
             
-            // ストリーミング合成
-            const audio = new TtsQuestV3Voicevox(speaker, geminiText, speed, intonationScale, apiKey);
-            
+            // 速度は合成時に指定できないので再生速度を上げる
+            audio.playbackRate = 1.2;
+
             audio.play();
         }
     } catch (error){
-    console.error("エラー: ", error);
+        console.error("エラー: ", error);
     
     } finally {
         // Loading表示を非表示にする
