@@ -8,7 +8,7 @@
 [<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&style=flat">](https://open.vscode.dev/mimisukeMaster/AI-VOICEVOX)
 
 
-GeminiやcohereなどのLLMを使用し、質問に答えたり、LLM同士で対話させることができるWebアプリです。全ての返答はVOICEVOXによりリアルタイムで音声合成され、読み上げられます。
+GeminiやCohere(CommandR+)などのLLMを使用し、質問に答えたり、LLM同士で対話させることができるWebアプリです。全ての返答はVOICEVOXによりリアルタイムで音声合成され、読み上げられます。
 
 ## Requirements
 `npm`が効く環境で、以下のコマンドを実行して[package.json](/package.json)に記載されたパッケージをインストールしてください。
