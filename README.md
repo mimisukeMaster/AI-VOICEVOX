@@ -60,7 +60,7 @@ AI-VOICEVOX
 
 
 ## Initial Setup
-GeminiAPI Key, cohere API Key, VOICEVOX Web版 API Key が必要です。キーを取得後、ルートディレクトリに.envファイルを作成し格納してください。
+GeminiAPI Key, Cohere API Key, VOICEVOX Web版 API Key が必要です。キーを取得後、ルートディレクトリに.envファイルを作成し格納してください。
 ```env
 GEMINI_API_KEY="**********"
 COHERE_API_KEY="**********"
@@ -84,7 +84,7 @@ http://localhost:3000/<br>
 
 ### AI討論
  http://localhost:3000/debate<br>
- GeminiAPI、cohere API を用いて話し合いをさせます。議題をプロンプトとしてバックエンドに送り、それぞれのレスポンスをVOICEVOXで読み上げさせます。そのレスポンスを再び送り、これを繰り返します。
+ GeminiAPI、Cohere API を用いて話し合いをさせます。議題をプロンプトとしてバックエンドに送り、それぞれのレスポンスをVOICEVOXで読み上げさせます。そのレスポンスを再び送り、これを繰り返します。
 
 「対戦相手を変える」で片方の声を変えると、より対話っぽくなります。終了ボタンを押すと現在話されているターンで終了します。（推論中を含む）
 
@@ -110,7 +110,7 @@ VOICEVOX API Key 取得先と解説記事
 GeminiAPI Key 取得先
 - https://aistudio.google.com/app/apikey
 
-cohere API Key 取得先
+Cohere API Key 取得先
 - https://dashboard.cohere.com/api-keys
 
 ## Author

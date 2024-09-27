@@ -56,7 +56,7 @@ app.post("/api/gemini", async (req, res) => {
     res.send(filteredText);
 });
 
-/* cohere用 HTTP POST */
+/* Cohere用 HTTP POST */
 app.post("/api/cohere", async (req, res) => {
     
     // cohereの Chat API の準備 Keyは.envから取得
