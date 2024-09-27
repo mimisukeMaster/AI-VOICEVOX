@@ -62,6 +62,7 @@ select {
     color: white;
     background-color:brown;
     cursor: pointer;
+    height: 35px;
 }
 
 option {

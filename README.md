@@ -83,7 +83,7 @@ http://localhost:3000/<br>
 「ローカルAPIを使う」にチェックを入れた場合、ローカルのVOICEVOX Engineを利用します。別途、VOICEVOXソフトを起動しておいてください。
 
 ### AI討論
- http://localhost:3000/discussion<br>
+ http://localhost:3000/debate<br>
  GeminiAPI、cohere API を用いて話し合いをさせます。議題をプロンプトとしてバックエンドに送り、それぞれのレスポンスをVOICEVOXで読み上げさせます。そのレスポンスを再び送り、これを繰り返します。
 
 「対戦相手を変える」で片方の声を変えると、より対話っぽくなります。終了ボタンを押すと現在話されているターンで終了します。（推論中を含む）
@@ -93,7 +93,7 @@ http://localhost:3000/<br>
 ## Demo
 Vercel上でデプロイしており、そちらから仕様を確認できます。
 
-https://gemini-voicevox.vercel.app/
+https://ai-voicevox.vercel.app/
 
 - コミット時にこのドメインに再デプロイされますが、更新が遅れる場合があります。
 - 「ローカルのVOIEVOXを使う」は、Vercel上で動かしているため使用できません。

@@ -51,12 +51,10 @@ async function askButtonClicked(input) {
         loadingText.style.display = "inline-block";
         dotsText.style.display = "inline-block";
         loadingText.innerText = "考え中";
-
-        
+                
         // ボタン制御
         debateButton.disabled = true;
         debateFinish.disabled = false;
-        
         
         // バックへPOSTメッセージを送る
         // POSTメッセージは質問文を送るのでstring型を指定する

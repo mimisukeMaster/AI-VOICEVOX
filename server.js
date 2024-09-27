@@ -121,7 +121,6 @@ app.post("/api/voicevox", async (req, res) => {
 app.post("/api/local/voicevox", async (req, res) => {
 
     const apiUrl = "https://localhost:50021";
-    const speakerID = 3;  // 話者ID（3: ずんだもん）
     const intonationScale = 0.7;
     const speed = 1.2;
     try {
