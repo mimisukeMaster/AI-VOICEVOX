@@ -61,30 +61,28 @@ async function askButtonClicked(input) {
         // 発言を分ける
         orderInt++;
         
-        if (orderInt % 2 !== 0) {
-            
-            if (orderInt === 1) {
-                input += "について議論して下さい。議論をしていく上で、同じ文章は会話内で繰り返さないでください。何か聞き返したり、反論したりと、常に進展を持たせる内容にしてください。"
-            }
-            
+        if (orderInt % 2 !== 0) {            
             const gemini = await fetch("../api/gemini", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "text/plain",
+                    "Content-Type": "application/json",
                 },
-                body: input,
+                body: JSON.stringify({ order: orderInt, text: input }),
             });
+            
+            // 賛成意見一つのみ取得
             geminiText = await gemini.text();
             
             outputText.innerHTML += "<br><div class='geminiDebate'>" + geminiText + "</div>";
 
         } else {
+            // 議題・意見情報はサーバ側に存在しているので何も渡さない
             const cohere = await fetch("../api/cohere", {
                 method: "POST",
                 headers: {
                     "Content-Type": "text/plain",
                 },
-                body: input,
+                body: "",
             });
             cohereText = await cohere.text();
 
@@ -153,7 +151,6 @@ async function askButtonClicked(input) {
                 loadingText.style.display = "none";
                 dotsText.style.display = "none";
             });
-            
             // 再呼び出し
             audio.addEventListener("ended", () => { 
                 remarkEnded();
@@ -201,7 +198,9 @@ function remarkEnded() {
         isFinish = false;
         orderInt = 0;
         finishingText.innerText = "";
-        finishing.style.display = "none"
+        finishing.style.display = "none";
+        loadingText.style.display = "none";
+        dotsText.style.display = "none";
         debateButton.disabled = false;
         debateFinish.disabled = true;
         return;

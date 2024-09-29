@@ -38,9 +38,9 @@ async function askButtonClicked(input) {
         const geminiRes = await fetch("/api/gemini", {
             method: "POST",
             headers: {
-                "Content-Type": "text/plain",
+                "Content-Type": "Application/json",
             },
-            body: input,
+            body: JSON.stringify({ order: -1, text: input }),
         });
         if (!geminiRes.ok) {
             const text = await geminiRes.text();

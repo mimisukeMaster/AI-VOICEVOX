@@ -262,7 +262,7 @@ textarea:focus {
 }
 
 .geminiDebate::before {
-    content: "先攻";
+    content: "賛成";
     color:white;
     background-color: hotpink;
     padding: 0px 2px 0px 2px;
@@ -270,7 +270,7 @@ textarea:focus {
 }
 
 .cohereDebate::before {
-    content: "後攻";
+    content: "反対";
     color: white;
     background-color: deepskyblue;
     padding: 0px 2px 0px 2px;
@@ -279,5 +279,4 @@ textarea:focus {
 
 .links {
     margin-left: 5px;
-    
 }

@@ -4,6 +4,14 @@ require("dotenv").config();
 const app = express();
 const PORT = 3000;
 
+let theme = "";
+let pros = "";
+let cons = "";
+let insertAssertions = "";
+
+let prosAssertion = null;
+let consAssertion = null;
+
 /* サーバーの起動準備 */ 
 // フロントJSから送られるデータ型に合わせたミドルウェアを設定
 // その型を受け付けられるようにする
@@ -49,11 +57,90 @@ app.post("/api/gemini", async (req, res) => {
         ],
     });
 
-    // 実際にプロンプト文を送信して返答を代入
-    const geminiResult = await chatSession.sendMessage(req.body + 
-        "/ただし、回答は300文字以内にして、使用できる記号は「。、！？」のみで、他(マークダウン用も含む)は使わないで下さい。口語体にして、常に話を展開させることを意識してください。");
-    const filteredText = geminiResult.response.text().replace(/[<>*:;]/g,"");
-    res.send(filteredText);
+    // AI豆打者からの場合
+    if(req.body.order === -1) {
+        const geminiResult = await chatSession.sendMessage(req.body.text + 
+            "/ただし、回答は300文字以内にして、使用できる記号は「。、！？」のみで、他(マークダウン用も含む)は使わないで下さい。口語体にして、常に話を展開させることを意識してください。");
+        const filteredText = geminiResult.response.text().replace(/[<>*:;]/g,"");
+        res.send(filteredText);
+        return;
+    }
+    
+    // AI討論からの場合
+    // 初回は賛成・反対の定義づけから
+    if(req.body.order === 1) {
+        theme = req.body.text;
+        const geminiDefinision = await chatSession.sendMessage(`
+            次に与えられる「テーマ」から、考えられる「賛成派の主張」および「反対派の主張」をそれぞれ、とても簡潔な一文で定義づけるように表現してください。その一文には絶対に理由や追加の情報を含めないでください。
+            以下の例を参考に回答を作成してください。
+            
+            例1
+            テーマ:時間とお金どちらが大事か
+            回答
+            賛成派:時間が大事であり、お金よりも価値がある。
+            反対派:お金が大事であり、時間よりも重要だ。
+
+            例２
+            テーマ:中高一貫校は必要なのか
+            回答
+            賛成派:中高一貫校は必要である。
+            反対派:中高一貫校は必要ではない。
+
+            例３
+            テーマ:目玉焼きには塩か醤油か
+            回答
+            賛成派:目玉焼きには塩の方がしょうゆより適している。
+            反対派:目玉焼きにはしょうゆの方が塩より適している。
+
+            それでは、以下のテーマについて回答を作成してください。
+
+            テーマ:${theme}
+        `);
+        pros = geminiDefinision.response.text().split("\n")[0].split(":")[1];
+        cons = geminiDefinision.response.text().split("\n")[1].split(":")[1];
+    } else { 
+        // 2回目以降はまずサマライズしてから
+        const geminiSummarize = await chatSession.sendMessage(`
+            以下の議論が行われています。
+            テーマ:${theme}
+            賛成派の意見:${pros}
+            反対派の意見:${cons}
+
+            賛成派の見解:${prosAssertion}
+
+            反対派の見解:${consAssertion}
+
+            上記の賛成派、および反対派の意見・見解を総括して、以下の形式に従って回答してください。
+
+            賛成派の主張:
+            箇条書きで賛成派の主張とその理由を、各項目を200字以内で記入してください。
+            反対派の主張:
+            箇条書きで反対派の主張とその理由を、各項目を200字以内で記入してください。
+            `);
+        insertAssertions = `
+            これまでの議論のまとめ
+        ${geminiSummarize}
+        `;
+    }
+
+    // 既存の立場を基に賛成の意見を出力
+    const geminiPros = await chatSession.sendMessage(`
+        以下の議論が行われています。
+        テーマ:${req.body.text}
+        賛成派の意見:${pros}
+        反対派の意見:${cons}
+        ${insertAssertions}
+
+        上記のテーマについて、賛成派と反対派がそれぞれの主張とその理由を議論します。
+        あなたは賛成派の立場に立って、新たな視点を用いて、論理的に主張してください。根拠となるデータや考察の補足をするようにしてください。300文字以内で、箇条書きや改行、マークダウンを絶対に使わないでください。
+            
+        回答の例
+        例1:〇〇です。その理由は△△だからです。
+        例2:□□です。その根拠となるデータが◇◇で示されているからです。
+        `);
+    prosAssertion = geminiPros.response.text();
+
+    res.send(prosAssertion);
 });
 
 /* Cohere用 HTTP POST */
@@ -67,13 +154,23 @@ app.post("/api/cohere", async (req, res) => {
     });
 
     try {
-        // チャットリクエストを送信する
-        const cohereResult = await cohere.chat({
+        // 既存の立場を基に反対の意見を出力
+        const cohereCons = await cohere.chat({
             model: "command-r-plus",
-            message: req.body + "/ただし、回答は300文字以内にして、使用できる記号は「。、！？」のみで、他(マークダウン用も含む)は使わないで下さい。口語体にして、常に話を展開させることを意識してください。",
+            message: `
+                以下の議論が行われています。
+                テーマ:${theme}
+                賛成派の意見:${pros}
+                反対派の意見:${cons}
+
+                賛成派としての見解:${prosAssertion}
+
+                上記のテーマについて、賛成派と反対派がそれぞれの主張とその理由を議論します。
+                あなたは反対派の立場に立って、新たな視点を用いて、論理的に主張してください。根拠となるデータや考察の補足をするようにしてください。300文字以内で、**箇条書きや改行、マークダウンを絶対に使わないでください**。
+                反対派としての見解:「**ここの中身のみを書いてください**」`,
         });
-        const filteredText = cohereResult.text.replace(/[<>*:;]/g,"");
-        res.send(filteredText);
+        consAssertion = cohereCons.text;
+        res.send(consAssertion);
 
     } catch (error) {
         // エラーハンドリング
