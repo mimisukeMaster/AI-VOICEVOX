@@ -2,14 +2,18 @@
 const debateButton = document.getElementById("debateButton");
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
-const characterID = document.getElementById("character")
+const characterID = document.getElementById("character");
+const organizeButton = document.getElementById("organizeButton");
+const organizedText = document.getElementById("organizedText");
 const useLocalApi = document.getElementById("useLocalApi");
 const useLocalApiText = document.getElementById("useLocalApiText");
 const loadingText = document.getElementById("loading");
 const dotsText = document.getElementById("dots");
 const debateFinish = document.getElementById("debateFinish");
 const finishingText = document.getElementById("finishingText");
-const finishing = document.getElementById("finishing")
+const finishing = document.getElementById("finishing");
+const summary = document.getElementById("summary");
+
 let orderInt = 0;
 let isFinish = false;
 
@@ -17,21 +21,30 @@ let geminiText = null;
 let cohereText = null;
 
 inputText.addEventListener("input", () => {
-    if (inputText.value.trim() === "") debateButton.disabled = true;
-    else debateButton.disabled = false;
-});
-
-debateButton.addEventListener("click", () => {
-    askButtonClicked(inputText.value);
-    outputText.innerHTML = "";
+    if (inputText.value.trim() === "") {
+        organizeButton.disabled = true;
+        debateButton.disabled = true;
+    } else {
+        organizeButton.disabled = false;
+    }
 });
 
 inputText.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.key === "Enter") {
-        askButtonClicked(inputText.value);
+        organizeButtonClicked(inputText.value);
         outputText.innerHTML = "";
     }
 });
+
+organizeButton.addEventListener("click", () => {
+    organizeButtonClicked(inputText.value);
+    outputText.innerHTML = "";
+})
+
+debateButton.addEventListener("click", () => {
+    debateButtonClicked();
+});
+
 
 debateFinish.addEventListener("click", () => {
     isFinish = true;
@@ -44,7 +57,23 @@ if(window.location.hostname !== "localhost"){
     useLocalApiText.innerHTML = `<span title='ローカル環境でのみ使用できます'>${useLocalApiText.innerHTML}</span>`;
 } 
 
-async function askButtonClicked(input) {
+async function organizeButtonClicked(input) {
+
+    // Geminiに論点整理をさせ表示する
+    const geminiOrganize = await fetch("../api/gemini", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ order: orderInt, text: input }),
+    });
+    organizedText.innerHTML = await geminiOrganize.text();
+
+    //　ボタン有効化
+    debateButton.disabled = false;
+}
+
+async function debateButtonClicked() {
     
     try{
         // ローディング表示
@@ -53,6 +82,7 @@ async function askButtonClicked(input) {
         loadingText.innerText = "考え中";
                 
         // ボタン制御
+        organizeButton.disabled = true;
         debateButton.disabled = true;
         debateFinish.disabled = false;
         
@@ -61,22 +91,27 @@ async function askButtonClicked(input) {
         // 発言を分ける
         orderInt++;
         
-        if (orderInt % 2 !== 0) {            
+        if (orderInt % 2 !== 0) {
+            // Geminiで賛成意見生成    
+            // 議題・意見情報はサーバ側に存在しているのでtextは何も渡さないAI豆打者との兼ね合いでintではなくJSON形式を残している     
             const gemini = await fetch("../api/gemini", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ order: orderInt, text: input }),
+                body: JSON.stringify({ order: orderInt, text: ""}),
             });
-            
-            // 賛成意見一つのみ取得
-            geminiText = await gemini.text();
-            
-            outputText.innerHTML += "<br><div class='geminiDebate'>" + geminiText + "</div>";
+            geminiText = await gemini.json();
+            console.log(orderInt)
+            if (orderInt !== 1){
+                // 2週目以降は要約も表示
+                summary.innerHTML = geminiText.summary;
+            }
+            // 賛成意見表示
+            outputText.innerHTML += "<br><div class='geminiDebate'>" + geminiText.assertion + "</div>";
 
         } else {
-            // 議題・意見情報はサーバ側に存在しているので何も渡さない
+            // Cohereで反対意見生成
             const cohere = await fetch("../api/cohere", {
                 method: "POST",
                 headers: {
@@ -106,7 +141,7 @@ async function askButtonClicked(input) {
         let bodyText = null;
         let speakerID = null;
         if (orderInt % 2 !== 0){
-            bodyText = geminiText;
+            bodyText = geminiText.assertion;
             speakerID = "3"
         } else {
             bodyText = cohereText;
@@ -153,7 +188,7 @@ async function askButtonClicked(input) {
             });
             // 再呼び出し
             audio.addEventListener("ended", () => { 
-                remarkEnded();
+                debateEnded();
             });
         } else {
 
@@ -172,7 +207,7 @@ async function askButtonClicked(input) {
             
             audio.play();
 
-            // 音声再生開始
+            // 音声再生開始時
             audio.addEventListener("playing", () => {
 
                 // Loading表示を非表示にする
@@ -182,7 +217,7 @@ async function askButtonClicked(input) {
 
             // 再呼び出し
             audio.addEventListener("ended", () => { 
-                remarkEnded();
+                debateEnded();
             });
         }  
     } catch (error){
@@ -191,7 +226,7 @@ async function askButtonClicked(input) {
     }
 }
 
-function remarkEnded() {
+function debateEnded() {
 
     // 討論終了フラグ有効時
     if (isFinish) {
@@ -201,13 +236,12 @@ function remarkEnded() {
         finishing.style.display = "none";
         loadingText.style.display = "none";
         dotsText.style.display = "none";
+        organizeButton.disabled = false;
         debateButton.disabled = false;
         debateFinish.disabled = true;
         return;
-
-    } else if (orderInt % 2 !== 0) {
-        askButtonClicked(geminiText);
-    } else {
-        askButtonClicked(cohereText);
     }
+    
+    debateButtonClicked();
+
 }

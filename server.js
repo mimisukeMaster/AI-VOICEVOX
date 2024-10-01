@@ -7,7 +7,7 @@ const PORT = 3000;
 let theme = "";
 let pros = "";
 let cons = "";
-let insertAssertions = "";
+let insertSummary = "";
 
 let prosAssertion = null;
 let consAssertion = null;
@@ -67,10 +67,10 @@ app.post("/api/gemini", async (req, res) => {
     }
     
     // AI討論からの場合
-    // 初回は賛成・反対の定義づけから
-    if(req.body.order === 1) {
+    // 論点整理用のとき（orderInt = 0 の時に呼ばれる）
+    if(req.body.order === 0) {
         theme = req.body.text;
-        const geminiDefinision = await chatSession.sendMessage(`
+        const geminiOrganize = await chatSession.sendMessage(`
             次に与えられる「テーマ」から、考えられる「賛成派の主張」および「反対派の主張」をそれぞれ、とても簡潔な一文で定義づけるように表現してください。その一文には絶対に理由や追加の情報を含めないでください。
             以下の例を参考に回答を作成してください。
             
@@ -96,9 +96,13 @@ app.post("/api/gemini", async (req, res) => {
 
             テーマ:${theme}
         `);
-        pros = geminiDefinision.response.text().split("\n")[0].split(":")[1];
-        cons = geminiDefinision.response.text().split("\n")[1].split(":")[1];
-    } else { 
+        const geminiOrganizeRes = geminiOrganize.response.text();
+        pros = geminiOrganizeRes.split("\n")[0].split(":")[1];
+        cons = geminiOrganizeRes.split("\n")[1].split(":")[1];
+        res.send(geminiOrganizeRes);
+        return;
+    } else if (req.body.order !== 1) {
+
         // 2回目以降はまずサマライズしてから
         const geminiSummarize = await chatSession.sendMessage(`
             以下の議論が行われています。
@@ -117,9 +121,9 @@ app.post("/api/gemini", async (req, res) => {
             反対派の主張:
             箇条書きで反対派の主張とその理由を、各項目を200字以内で記入してください。
             `);
-        insertAssertions = `
+        insertSummary = `
             これまでの議論のまとめ
-        ${geminiSummarize}
+        ${geminiSummarize.response.text()}
         `;
     }
 
@@ -129,7 +133,7 @@ app.post("/api/gemini", async (req, res) => {
         テーマ:${req.body.text}
         賛成派の意見:${pros}
         反対派の意見:${cons}
-        ${insertAssertions}
+        ${insertSummary}
 
         上記のテーマについて、賛成派と反対派がそれぞれの主張とその理由を議論します。
         あなたは賛成派の立場に立って、新たな視点を用いて、論理的に主張してください。根拠となるデータや考察の補足をするようにしてください。300文字以内で、箇条書きや改行、マークダウンを絶対に使わないでください。
@@ -140,7 +144,7 @@ app.post("/api/gemini", async (req, res) => {
         `);
     prosAssertion = geminiPros.response.text();
 
-    res.send(prosAssertion);
+    res.send(JSON.stringify({ summary: insertSummary, assertion: prosAssertion }));
 });
 
 /* Cohere用 HTTP POST */
@@ -162,6 +166,7 @@ app.post("/api/cohere", async (req, res) => {
                 テーマ:${theme}
                 賛成派の意見:${pros}
                 反対派の意見:${cons}
+                ${insertSummary}
 
                 賛成派としての見解:${prosAssertion}
 
