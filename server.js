@@ -96,9 +96,12 @@ app.post("/api/gemini", async (req, res) => {
 
             テーマ:${theme}
         `);
-        const geminiOrganizeRes = geminiOrganize.response.text();
-        pros = geminiOrganizeRes.split("\n")[0].split(":")[1];
-        cons = geminiOrganizeRes.split("\n")[1].split(":")[1];
+        const geminiOrganizeRes = geminiOrganize.response.text().replace(/[#*]/g, "");
+        const parts = geminiOrganizeRes.split("反対派:");
+        const formerParts = parts[0].split("賛成派:");
+        const themeParts = formerParts[0].split("テーマ:");
+        pros = formerParts[1];
+        cons = parts[1];
         res.send(geminiOrganizeRes);
         return;
     } else if (req.body.order !== 1) {
@@ -125,6 +128,7 @@ app.post("/api/gemini", async (req, res) => {
             これまでの議論のまとめ
         ${geminiSummarize.response.text()}
         `;
+        console.log(insertSummary);
     }
 
     // 既存の立場を基に賛成の意見を出力

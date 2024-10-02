@@ -1,4 +1,3 @@
-
 const debateButton = document.getElementById("debateButton");
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
@@ -122,7 +121,6 @@ async function debateButtonClicked() {
             cohereText = await cohere.text();
 
             outputText.innerHTML += "<br><div class='cohereDebate'>" + cohereText + "</div>";
-
         }
         // 最下部に移動
         inputText.scrollIntoView({ behavior: 'smooth', block: 'start' });
