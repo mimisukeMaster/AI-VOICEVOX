@@ -217,7 +217,7 @@ async function debateButtonClicked() {
             audio.addEventListener("ended", () => { 
                 debateEnded();
             });
-        }  
+        } 
     } catch (error){
         console.error("エラー: ", error);
         

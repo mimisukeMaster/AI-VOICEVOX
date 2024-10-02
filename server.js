@@ -8,7 +8,7 @@ let theme = "";
 let pros = "";
 let cons = "";
 let insertSummary = "";
-
+let insertSummaryFormatted = "";
 let prosAssertion = null;
 let consAssertion = null;
 
@@ -98,11 +98,10 @@ app.post("/api/gemini", async (req, res) => {
         `);
         const geminiOrganizeRes = geminiOrganize.response.text().replace(/[#*]/g, "");
         const parts = geminiOrganizeRes.split("反対派:");
-        const formerParts = parts[0].split("賛成派:");
-        const themeParts = formerParts[0].split("テーマ:");
-        pros = formerParts[1];
+        pros = parts[0].split("賛成派:")[1];
         cons = parts[1];
-        res.send(geminiOrganizeRes);
+        const geminiOrganizeFormatted = geminiOrganizeRes.replace("賛成派:", "<br>賛成派:").replace("反対派:", "<br>反対派:");
+        res.send(geminiOrganizeFormatted);
         return;
     } else if (req.body.order !== 1) {
 
@@ -124,11 +123,8 @@ app.post("/api/gemini", async (req, res) => {
             反対派の主張:
             箇条書きで反対派の主張とその理由を、各項目を200字以内で記入してください。
             `);
-        insertSummary = `
-            これまでの議論のまとめ
-        ${geminiSummarize.response.text()}
-        `;
-        console.log(insertSummary);
+        insertSummary = `これまでの議論のまとめ\n${geminiSummarize.response.text()}`;
+        insertSummaryFormatted = insertSummary.replace(/[##]/g, "<br>").replace(/[*]/g, "");
     }
 
     // 既存の立場を基に賛成の意見を出力
@@ -148,7 +144,7 @@ app.post("/api/gemini", async (req, res) => {
         `);
     prosAssertion = geminiPros.response.text();
 
-    res.send(JSON.stringify({ summary: insertSummary, assertion: prosAssertion }));
+    res.send(JSON.stringify({ summary: insertSummaryFormatted, assertion: prosAssertion }));
 });
 
 /* Cohere用 HTTP POST */
