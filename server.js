@@ -122,9 +122,9 @@ app.post("/api/gemini", async (req, res) => {
             箇条書きで賛成派の主張とその理由を、各項目を200字以内で記入してください。
             反対派の主張:
             箇条書きで反対派の主張とその理由を、各項目を200字以内で記入してください。
-            `);
+            `);       
         insertSummary = `これまでの議論のまとめ\n${geminiSummarize.response.text()}`;
-        insertSummaryFormatted = insertSummary.replace(/[##]/g, "<br>").replace(/[*]/g, "");
+        insertSummaryFormatted = insertSummary.replace(/[\n]/g, "<br>").replace(/[#*]/g, "");
     }
 
     // 既存の立場を基に賛成の意見を出力
