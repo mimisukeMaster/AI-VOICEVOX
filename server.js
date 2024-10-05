@@ -159,7 +159,7 @@ app.post("/api/cohere", async (req, res) => {
     try {
         // 既存の立場を基に反対の意見を出力
         const cohereCons = await cohere.chat({
-            model: "command-r-plus",
+            model: "command-r",
             message: `
                 以下の議論が行われています。
                 テーマ:${theme}
