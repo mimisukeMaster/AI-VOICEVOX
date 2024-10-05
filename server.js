@@ -234,7 +234,7 @@ app.post("/api/voicevox/local", async (req, res) => {
 app.post("/api/voicevox/fast", async (req, res) => {
 
     const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
-    const intonationScale = 0.7;
+    const intonationScale = 0.8;
     const speed = 1.2;
         try {
             const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${req.body.speaker}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body.text}`);
