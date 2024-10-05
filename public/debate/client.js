@@ -34,6 +34,8 @@ elements.inputText.addEventListener("input", () => {
 elements.inputText.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.key === "Enter") {
         elements.outputText.innerHTML = "";
+        elements.summary.innerHTML = "";
+        elements.debateButton.disabled = false;
         organizeButtonClicked(elements.inputText.value);
     }
 });
@@ -41,6 +43,7 @@ elements.inputText.addEventListener("keydown", (event) => {
 // 論点を整理する ボタン押下
 elements.organizeButton.addEventListener("click", () => {
     elements.outputText.innerHTML = "";
+    elements.summary.innerHTML = "";
     elements.debateButton.disabled = false;
     organizeButtonClicked(elements.inputText.value);
 });
@@ -214,6 +217,5 @@ function resetDebate() {
     toggleLoading(false, "");
 
     elements.organizeButton.disabled = false;
-    elements.debateButton.disabled = false;
     elements.debateFinishButton.disabled = true;
 }

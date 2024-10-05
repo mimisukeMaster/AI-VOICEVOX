@@ -133,12 +133,12 @@ textarea:focus {
 
 #organizeButton {
         transition: background-color 0.5s;
-        width: 130px;
+        width: 145px;
         height: 35px;
         text-align: center;
         font-family: "myfont";
         font-weight: normal;
-        font-size: 14px;
+        font-size: 16px;
         background-color: goldenrod;
         border-radius: 1px;
         border-color: darkgoldenrod;
