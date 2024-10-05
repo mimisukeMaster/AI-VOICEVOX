@@ -137,7 +137,7 @@ app.post("/api/gemini", async (req, res) => {
     // 既存の立場を基に賛成の意見を出力
     const geminiPros = await chatSession.sendMessage(`
         以下の議論が行われています。
-        テーマ:${req.body.text}
+        テーマ:${theme}
         賛成派の意見:${pros}
         反対派の意見:${cons}
         ${insertSummary}
@@ -208,7 +208,7 @@ app.post("/api/voicevox", async (req, res) => {
 
         } catch (error) {
             res.status(500).json({ error: "リクエストに失敗しました" });
-            console.log("VOICEVOX Web API処理時にエラ―が発生しました:", error.message);
+            console.log(`VOICEVOX Web API処理時にエラ―が発生しました: ${error.message}`);
         }
 
     } else {
@@ -220,7 +220,7 @@ app.post("/api/voicevox", async (req, res) => {
 // VOICEVOX local API Handler
 app.post("/api/local/voicevox", async (req, res) => {
 
-    const apiUrl = "https://localhost:50021";
+    const apiUrl = "http://localhost:50021";
     const intonationScale = 0.7;
     const speed = 1.2;
     try {
@@ -234,12 +234,12 @@ app.post("/api/local/voicevox", async (req, res) => {
         if (!audioQueryResponse.ok) {
             throw new Error("音声生成（クエリ生成）に失敗しました");
         }
-
+        
         const audioQueryData = await audioQueryResponse.json()
         audioQueryData.intonationScale = intonationScale;
         audioQueryData.speedScale = speed;
-
-        const response = await fetch(`${apiUrl}/synthesis?speaker=${req.body.speaker}`, {
+        
+        const synthesisResponse = await fetch(`${apiUrl}/synthesis?speaker=${req.body.speaker}`, {
             method: "POST",
             headers: {
                 "accept": "audio/wav",
@@ -248,12 +248,12 @@ app.post("/api/local/voicevox", async (req, res) => {
             body: JSON.stringify(audioQueryData)
         });
         
-        if (!response.ok) {
+        if (!synthesisResponse.ok) {
             throw new Error("音声生成（wav生成）に失敗しました");
         }
 
         // 音声バイナリを受け取る
-        const voicevoxResult = await response.arrayBuffer();
+        const voicevoxResult = await synthesisResponse.arrayBuffer();
         
         // フロントエンドにBufferに整形して返す
         res.set("Content-Type", "audio/wav");
@@ -261,7 +261,7 @@ app.post("/api/local/voicevox", async (req, res) => {
         
     } catch (error) {
         res.status(500).json({ error: "リクエストに失敗しました" });
-        console.log("VOICEVOX ローカルAPI処理時にエラ―が発生しました:", error.message);
+        console.log(`VOICEVOX ローカルAPI処理時にエラーが発生しました: ${error.message}`);
     }
 });
 
