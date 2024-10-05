@@ -180,45 +180,10 @@ app.post("/api/cohere", async (req, res) => {
         // エラーハンドリング
         console.error('Error:', error);
     }
-
-})
-
-// VOICEVOX Web API Handler
-app.post("/api/voicevox", async (req, res) => {
-
-    const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
-    const intonationScale = 0.7;
-    const speed = 1.2;
-    const host = req.hostname || req.get("host");
-    
-    if (host.includes("localhost")){
-
-        // ローカル環境では高速版を使い合成
-        try {
-            const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${req.body.speaker}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body.text}`);
-            if (!response.ok) {
-                throw new Error("音声生成に失敗しました", response);
-            }
-            // 音声バイナリを受け取る
-            const voicevoxResult = await response.arrayBuffer();
-
-            // フロントエンドにBufferに整形して返す
-            res.set("Content-Type", "audio/wav");
-            res.send(Buffer.from(voicevoxResult));
-
-        } catch (error) {
-            res.status(500).json({ error: "リクエストに失敗しました" });
-            console.log(`VOICEVOX Web API処理時にエラ―が発生しました: ${error.message}`);
-        }
-
-    } else {
-        // それ以外(Vercel)ではストリーミング版を使うので APIキーを返す
-        res.send(voicevoxApiKey); 
-    }
 });
 
 // VOICEVOX local API Handler
-app.post("/api/local/voicevox", async (req, res) => {
+app.post("/api/voicevox/local", async (req, res) => {
 
     const apiUrl = "http://localhost:50021";
     const intonationScale = 0.7;
@@ -230,7 +195,7 @@ app.post("/api/local/voicevox", async (req, res) => {
                 "accept": "application/json",
             },
         });
-
+        
         if (!audioQueryResponse.ok) {
             throw new Error("音声生成（クエリ生成）に失敗しました");
         }
@@ -251,7 +216,7 @@ app.post("/api/local/voicevox", async (req, res) => {
         if (!synthesisResponse.ok) {
             throw new Error("音声生成（wav生成）に失敗しました");
         }
-
+        
         // 音声バイナリを受け取る
         const voicevoxResult = await synthesisResponse.arrayBuffer();
         
@@ -261,8 +226,35 @@ app.post("/api/local/voicevox", async (req, res) => {
         
     } catch (error) {
         res.status(500).json({ error: "リクエストに失敗しました" });
-        console.log(`VOICEVOX ローカルAPI処理時にエラーが発生しました: ${error.message}`);
+        console.log(`VOICEVOXローカル版API処理時にエラーが発生しました: ${error.message}\nストリーミング版で合成されます`);
     }
 });
+
+// VOICEVOX fast version API Handler
+app.post("/api/voicevox/fast", async (req, res) => {
+
+    const apiUrl = "https://deprecatedapis.tts.quest/v2/voicevox/audio";
+    const intonationScale = 0.7;
+    const speed = 1.2;
+        try {
+            const response = await fetch(`${apiUrl}?key=${voicevoxApiKey}&speaker=${req.body.speaker}&intonationScale=${intonationScale}&speed=${speed}&text=${req.body.text}`);
+            if (!response.ok) {
+                throw new Error("音声生成に失敗しました", response);
+            }
+            // 音声バイナリを受け取る
+            const voicevoxResult = await response.arrayBuffer();
+
+            // フロントエンドにBufferに整形して返す
+            res.set("Content-Type", "audio/wav");
+            res.send(Buffer.from(voicevoxResult));
+
+        } catch (error) {
+            res.status(500).json({ error: "リクエストに失敗しました" });
+            console.log(`VOICEVOX高速版API処理時にエラ―が発生しました: ${error.message}\nストリーミング版で合成されます`);
+        }    
+});
+
+// VOICEVOX streaming API Handler
+app.post("/api/voicevox/streaming", (req, res) => res.send(voicevoxApiKey));
 
 module.exports = app;

@@ -56,9 +56,9 @@ async function askButtonClicked(input) {
         // アクセス先指定
         let endPointURL = null;
         if(useLocalApi.checked) {
-            endPointURL = "/api/local/voicevox";
+            endPointURL = "/api/voicevox/local";
         } else {
-            endPointURL = "/api/voicevox";
+            endPointURL = "/api/voicevox/fast";
         }
         
         // 音声生成

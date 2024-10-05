@@ -146,31 +146,37 @@ function toggleLoading(isLoading, text) {
 
 // 音声再生準備用関数
 async function playVoice(text) {
-    const endPointURL = elements.useLocalApi.checked ? "../api/local/voicevox" : "../api/voicevox";
     const speakerID = orderInt % 2 !== 0 ? "3" : elements.characterID.value;
     
-    // ローカル環境なら高速版またはソフト版を利用し、それ以外 (Vercel)ならストリーミング版を利用する
-    if (window.location.hostname === "localhost") await synthesizeAudioLocally(endPointURL, text, speakerID);
-    else await synthesizeAudioRemotely(endPointURL, text, speakerID);
+    // ローカル環境なら高速版またはローカル版を利用し、それ以外 (Vercel)ならストリーミング版を利用する
+    if (window.location.hostname === "localhost") {
+        elements.useLocalApi.checked ? await synthesizeAudioLocally("../api/voicevox/local", text, speakerID)
+            : await synthesizeAudioLocally("../api/voicevox/fast", text, speakerID);
+    }
+    else await synthesizeAudioStreaming("../api/voicevox/streaming", text, speakerID);
 }
 
-// ローカル合成用関数
+// 高速版合成用関数
 async function synthesizeAudioLocally(url, text, speaker) {
     const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: text, speaker: speaker }),
     });
-    if (!response.ok) throw new Error("ローカル環境の音声合成に失敗しました");
-        
+    if (!response.ok) {
+        // 合成失敗時はストリーミング版を使う
+        synthesizeAudioStreaming("../api/voicevox/streaming", text, speaker);
+        return;
+    }    
     const audioBlob = await response.blob();
     const audioUrl = URL.createObjectURL(audioBlob);
     const audio = new Audio(audioUrl);
+
     handleAudio(audio, audioUrl);
 }
 
-// リモート合成用関数
-async function synthesizeAudioRemotely(url, text, speaker) {
+// ストリーミング版合成用関数
+async function synthesizeAudioStreaming(url, text, speaker) {
         const apiKeyResponse = await fetch(url, {
             method: "POST",
         headers: { "Contents-Type": "text/plain" },
