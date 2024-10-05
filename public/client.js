@@ -37,7 +37,6 @@ if(window.location.hostname !== "localhost"){
 } 
 
 async function askButtonClicked(input) {
-    
     try{
         // ローディング表示
         toggleLoading(true, "考え中");
