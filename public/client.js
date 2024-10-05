@@ -114,9 +114,6 @@ async function synthesizeAudioStreaming(url, text, speaker) {
     const apiKey = await apiKeyResponse.text();
     const audio = new TtsQuestV3Voicevox(speaker, text, apiKey);
     
-    // ストリーミング版では話速を指定できないので再生速度を上げる        
-    audio.playbackRate = 1.4;
-    
     handleAudio(audio, null);
 }
 
