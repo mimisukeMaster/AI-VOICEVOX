@@ -108,7 +108,7 @@ async function debateButtonClicked() {
         // ローディング表示変更
         toggleLoading(true, "発声準備中");
         
-        // 音声生成
+        // 音声処理
         playVoice(orderInt % 2 !== 0 ? geminiText.assertion : cohereText);
     } catch (error){
         console.error(`エラー: ${error}`);
@@ -122,7 +122,7 @@ async function fetchAndParse(url, order, type, returnType) {
         headers: {
             "Content-Type": type,
         },
-        body: JSON.stringify({ order: order, text:"" }),
+        body: JSON.stringify({ order: order, text: "" }),
     });
     return returnType === "json" ? response.json() : response.text();
 }
@@ -156,7 +156,7 @@ async function playVoice(text) {
     else await synthesizeAudioStreaming("../api/voicevox/streaming", text, speakerID);
 }
 
-// 高速版合成用関数
+// ローカル環境での合成用関数
 async function synthesizeAudioLocally(url, text, speaker) {
     const response = await fetch(url, {
         method: "POST",

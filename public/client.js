@@ -1,24 +1,34 @@
-const askButton = document.getElementById("askButton");
-const inputText = document.getElementById("inputText");
-const outputText = document.getElementById("outputText");
-const useLocalApi = document.getElementById("useLocalApi");
-const useLocalApiText = document.getElementById("useLocalApiText");
-const loadingText = document.getElementById("loading");
-const dotsText = document.getElementById("dots");
+// Get HTML element IDs
+const ids = {
+    askButton: "askButton",
+    inputText: "inputText",
+    outputText: "outputText",
+    useLocalApi: "useLocalApi",
+    useLocalApiText: "useLocalApiText",
+    loadingText: "loading",
+    dotsText: "dots"
+}
+const elements = {};
+Object.keys(ids).forEach(key => elements[key] = document.getElementById(ids[key]));
 
+// テキスト入力
 inputText.addEventListener("input", () => {
-    if (inputText.value.trim() === "") askButton.disabled = true;
-    else askButton.disabled = false;
+    const isEmpty = inputText.value.trim() === "";
+    elements.askButton.disabled = isEmpty;
 });
 
-askButton.addEventListener("click", () => {
-    askButtonClicked(inputText.value);
-});
-
+// テキストエリアで Ctrl+Enter
 inputText.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.key === "Enter") {
+        elements.outputText.innerHTML = "";
         askButtonClicked(inputText.value);
     }
+});
+
+// 質問する! ボタン押下
+askButton.addEventListener("click", () => {
+    elements.outputText.innerHTML = "";
+    askButtonClicked(inputText.value);
 });
 
 if(window.location.hostname !== "localhost"){
@@ -30,92 +40,90 @@ async function askButtonClicked(input) {
     
     try{
         // ローディング表示
-        loadingText.style.display = "inline-block";
-        dotsText.style.display = "inline-block";
-        loadingText.innerText = "考え中";
+        toggleLoading(true, "考え中");
         
-        // 文章を送るのでstring型でPOST送信
-        const geminiRes = await fetch("/api/gemini", {
-            method: "POST",
-            headers: {
-                "Content-Type": "Application/json",
-            },
-            body: JSON.stringify({ order: -1, text: input }),
-        });
-        if (!geminiRes.ok) {
-            const text = await geminiRes.text();
-            throw new Error(`HTTP error! Status: ${geminiRes.status}, Message: ${text}`);
-        }
-        
-        const geminiText = await geminiRes.text();
-        outputText.innerText = geminiText;
+        // 回答文生成
+        const gemini = await fetchAndParse("/api/gemini", -1, input, "application/json", "text");        
+        outputText.innerText = gemini;
         
         // ローディング表示変更
-        loadingText.innerText = "発声準備中";
+        toggleLoading(true, "発声準備中");
         
-        // アクセス先指定
-        let endPointURL = null;
-        if(useLocalApi.checked) {
-            endPointURL = "/api/voicevox/local";
-        } else {
-            endPointURL = "/api/voicevox/fast";
-        }
-        
-        // 音声生成
-        if(window.location.hostname === "localhost") {
-
-            // ローカル環境では高速版を使う
-            const voicevoxRes = await fetch(endPointURL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    text: geminiText,
-                    speaker: "3"
-                })
-            });
-            
-            if (!voicevoxRes.ok) {
-                throw new Error("サーバーとの通信に失敗しました");
-            }
-            
-            // 音声データをバイナリとして取得
-            const audioBlob = await voicevoxRes.blob();
-            
-            // 音声データを再生
-            const audioUrl = URL.createObjectURL(audioBlob);
-            const audio = new Audio(audioUrl);
-            audio.play();
-            
-            // 使い終わったらURLを解放 メモリリーク防ぐ
-            audio.onended = () => {
-                URL.revokeObjectURL(audioUrl);
-            };
-        } else {
-
-            // それ以外(Vercel)ではストリーミング版を使う
-            const speaker = 3;
-            const apiKeyRes = await fetch(endPointURL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain",
-                },
-            });
-            const apiKey =  await apiKeyRes.text();
-            const audio = new TtsQuestV3Voicevox(speaker, geminiText, apiKey);
-            
-            // 速度は合成時に指定できないので再生速度を上げる
-            audio.playbackRate = 1.2;
-
-            audio.play();
-        }
+        // 音声処理
+        playVoice(gemini);
     } catch (error){
         console.error("エラー: ", error);
-    
-    } finally {
-        // Loading表示を非表示にする
-        loadingText.style.display = "none";
-        dotsText.style.display = "none";
     }
+}
+
+// ロード表示処理用関数
+function toggleLoading(isLoading, text) {
+    elements.loadingText.style.display = isLoading ? "inline-block" : "none";
+    elements.dotsText.style.display = isLoading ? "inline-block" : "none";
+    elements.loadingText.innerText = text;
+}
+
+// LLMエンドポイント通信用関数
+async function fetchAndParse(url, order, text, type, returnType) {
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": type,
+        },
+        body: JSON.stringify({ order: order, text: text }),
+    });
+    return returnType === "json" ? response.json() : response.text();
+}
+
+// 音声再生準備用関数
+async function playVoice(text) {
+    const speakerID = "3";
+    
+    // ローカル環境なら高速版またはローカル版を利用し、それ以外 (Vercel)ならストリーミング版を利用する
+    if (window.location.hostname === "localhost") {
+        elements.useLocalApi.checked ? await synthesizeAudioLocally("/api/voicevox/local", text, speakerID)
+            : await synthesizeAudioLocally("/api/voicevox/fast", text, speakerID);
+    }
+    else await synthesizeAudioStreaming("/api/voicevox/streaming", text, speakerID);
+}
+
+// ローカル環境での合成用関数
+async function synthesizeAudioLocally(url, text, speaker) {
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: text, speaker: speaker }),
+    });
+    if (!response.ok) {
+        // 合成失敗時はストリーミング版を使う
+        synthesizeAudioStreaming("/api/voicevox/streaming", text, speaker);
+        return;
+    }    
+    const audioBlob = await response.blob();
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+
+    handleAudio(audio, audioUrl);
+}
+
+// ストリーミング版合成用関数
+async function synthesizeAudioStreaming(url, text, speaker) {
+        const apiKeyResponse = await fetch(url, {
+            method: "POST",
+        headers: { "Contents-Type": "text/plain" },
+    });
+    const apiKey = await apiKeyResponse.text();
+    const audio = new TtsQuestV3Voicevox(speaker, text, apiKey);
+    
+    // ストリーミング版では話速を指定できないので再生速度を上げる        
+    audio.playbackRate = 1.4;
+    
+    handleAudio(audio, null);
+}
+
+// 再生用関数
+async function handleAudio(audio, audioUrl) {
+    audio.play();
+    audio.addEventListener("playing", () => toggleLoading(false, ""));
+    if (audioUrl) audio.onended = () => URL.revokeObjectURL(audioUrl);
 }
