@@ -42,7 +42,7 @@ async function askButtonClicked(input) {
         toggleLoading(true, "考え中");
         
         // 回答文生成
-        const gemini = await fetchAndParse("/api/gemini", -1, input, "application/json", "text");        
+        const gemini = await fetchAndParse("/api/gemini", -1, input, "application/json");        
         outputText.innerText = gemini;
         
         // ローディング表示変更
@@ -63,7 +63,7 @@ function toggleLoading(isLoading, text) {
 }
 
 // LLMエンドポイント通信用関数
-async function fetchAndParse(url, order, text, type, returnType) {
+async function fetchAndParse(url, order, text, type) {
     const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -71,7 +71,8 @@ async function fetchAndParse(url, order, text, type, returnType) {
         },
         body: JSON.stringify({ order: order, text: text }),
     });
-    return returnType === "json" ? response.json() : response.text();
+    if (!response.ok) return "不適切なコンテンツを含む回答が生成されてしまいました。議題を変えて再度お試しください。"
+    return response.text();
 }
 
 // 音声再生準備用関数
