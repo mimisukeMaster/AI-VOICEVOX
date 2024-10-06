@@ -32,7 +32,11 @@
     
     <p><textarea cols="40" rows="3" class="debate" id="inputText" placeholder="例: 週休3日制はアリかナシか"></textarea></p>
     <p>について討論</p>
-    <p class="loading"><button type="button" id="debateButton" disabled>討論開始！</button>
+    
+    <p><button type="button" id="organizeButton" disabled>1: 論点を整理する</button></p>
+    <p id="organizedText"></p>
+
+    <p class="loading"><button type="button" id="debateButton" disabled>2: 討論開始！</button>
 
         <label class="checkbox-container">
             <input type="checkbox" id="useLocalApi">
@@ -43,6 +47,9 @@
     <p>
         <button type="button" id="debateFinish" disabled>終了</button>
         <span id="finishingText"></span><span id="finishing"></span>
+    </p>
+    <p id="summary">
+        
     </p>
     <p id="outputText">
         <!--このidを指定して出力される-->

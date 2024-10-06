@@ -2,14 +2,24 @@
     "version": 2,
     "builds": [
         {
-        "src": "server.js", 
-        "use": "@vercel/node"
+            "src": "server.js", 
+            "use": "@vercel/node"
         }
     ],
-    "routes": [
+    "rewrites": [
         {
-        "src": "/(.*)",
-        "dest": "server.js"
+            "source": "/(.*)",
+            "destination": "server.js"
+        }
+    ],
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate" },
+                { "key": "Pragma", "value": "no-cache" },
+                { "key": "Expires", "value": "0" }
+            ]
         }
     ]
 }

@@ -27,6 +27,7 @@ class TtsQuestV3Voicevox extends Audio {
             }
             else if (typeof response.mp3StreamingUrl !== 'undefined') {
                 owner.src = response.mp3StreamingUrl;
+                owner.playbackRate = 1.2;
             }
             else if (typeof response.errorMessage !== 'undefined') {
                 throw new Error(response.errorMessage);
