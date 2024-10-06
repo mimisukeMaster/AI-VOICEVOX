@@ -11,6 +11,7 @@ const PORT = 3000;
 const geminiApiKey = process.env.GEMINI_API_KEY;
 const cohereApiKey = process.env.COHERE_API_KEY;
 const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
+const badContentNotice = "不適切なコンテンツを含む回答が生成されてしまいました。議題を変えて再度お試しください。";
 
 const genAI = new GoogleGenerativeAI(geminiApiKey);
 const cohere = new CohereClient({ token: cohereApiKey });
@@ -84,6 +85,9 @@ async function organizeDebate(chatSession) {
         テーマ:${theme}
     `);
     const geminiOrganizeRes = formatResponseText(geminiOrganize.response.text(), false);
+    if (geminiOrganizeRes.includes("A server error has occurred FUNCTION_INVOCATION_FAILED")) {
+        return badContentNotice;
+    }
     const parts = geminiOrganizeRes.split("反対派:");
     pros = parts[0].split("賛成派:")[1];
     cons = parts[1];
@@ -120,7 +124,10 @@ app.post("/api/gemini", async (req, res) => {
     // AI豆打者からの場合
     if(req.body.order === -1) {
         const geminiQuestion = await chatSession.sendMessage(`${req.body.text}/回答は口語体で、300文字以内にしてください。`);
-        res.send(formatResponseText(geminiQuestion.response.text(), false));
+        const geminiQuestionRes = formatResponseText(geminiQuestion.response.text(), false);
+        if (geminiQuestionRes.includes("A server error has occurred FUNCTION_INVOCATION_FAILED")) {
+            res.send(badContentNotice);
+        } else res.send(geminiOrganizeRes);
         return;
     }
     

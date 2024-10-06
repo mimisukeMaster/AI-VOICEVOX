@@ -81,7 +81,6 @@ async function organizeButtonClicked(input) {
         },
         body: JSON.stringify({ order: orderInt, text: input }),
     });
-    if(!geminiOrganize.ok) organizedText.innerHTML = "不適切なコンテンツを含む回答が生成されてしまいました。議題を変えて再度お試しください。";
     organizedText.innerHTML = await geminiOrganize.text();
 
     //　ボタン有効化

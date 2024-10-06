@@ -71,7 +71,6 @@ async function fetchAndParse(url, order, text, type) {
         },
         body: JSON.stringify({ order: order, text: text }),
     });
-    if (!response.ok) return "不適切なコンテンツを含む回答が生成されてしまいました。議題を変えて再度お試しください。"
     return response.text();
 }
 
