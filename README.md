@@ -8,7 +8,7 @@
 [<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&style=flat">](https://open.vscode.dev/mimisukeMaster/AI-VOICEVOX)
 
 
-GeminiやCohere(CommandR+)などのLLMを使用し、質問に答えたり、LLM同士で対話させることができるWebアプリです。全ての返答はVOICEVOXによりリアルタイムで音声合成され、読み上げられます。
+GeminiやCommandRなどのLLMを使用し、質問に答えたり、LLM同士で対話させることができるWebアプリです。全ての返答はVOICEVOXによりリアルタイムで音声合成され、読み上げられます。
 
 ## Requirements
 `npm`が効く環境で、以下のコマンドを実行して[package.json](/package.json)に記載されたパッケージをインストールしてください。
@@ -78,15 +78,14 @@ Server started on port:3000
 ```
 ### AI豆打者
 http://localhost:3000/<br>
-対話形式で質問ができます。質問文をバックエンドに送り、GeminiAPIを呼んだ後、レスポンスをVOICEVOXで読み上げています。ローカルでの音声合成は全て[高速版](https://voicevox.su-shiki.com/su-shikiapis/)で処理されます。2回目以降の質問は、前回の質問が背景情報として保持されるわけではないので注意してください。
-
-「ローカルAPIを使う」にチェックを入れた場合、ローカルのVOICEVOX Engineを利用します。別途、VOICEVOXソフトを起動しておいてください。
+対話形式で質問ができます。質問文をバックエンドに送り、GeminiAPIを呼んだ後、レスポンスをVOICEVOXで読み上げています。ローカルでの音声合成は基本的に[高速版](https://voicevox.su-shiki.com/su-shikiapis/)で処理されます。<br>
+「ローカルAPIを使う」にチェックを入れた場合、ローカルのVOICEVOX Engineを利用し[ローカル版](http://localhost:50021/docs)で処理されます。別途、VOICEVOXソフトを起動しておいてください。
 
 ### AI討論
  http://localhost:3000/debate<br>
- GeminiAPI、Cohere API を用いて話し合いをさせます。議題をプロンプトとしてバックエンドに送り、それぞれのレスポンスをVOICEVOXで読み上げさせます。そのレスポンスを再び送り、これを繰り返します。
+ Gemini、CommandR の各APIを用いて話し合いをさせます。バックエンドで議題から立場を明確に定義し、各々の主張を出力させています。それをフロントエンドに返し、VOICEVOXで読み上げています。
 
-「対戦相手を変える」で片方の声を変えると、より対話っぽくなります。終了ボタンを押すと現在話されているターンで終了します。（推論中を含む）
+「対戦相手を変える」で片方の声を変えると、より対話っぽくなります。終了ボタンで現在話されているターンで終了します。（推論中を含む）
 
 こちらも、「ローカルAPIを使う」にチェックを入れた場合VOICEVOXソフトを起動してから「討論開始！」ボタンを押してください。
 
@@ -96,9 +95,9 @@ Vercel上でデプロイしており、そちらから仕様を確認できま�
 https://ai-voicevox.vercel.app/
 
 - コミット時にこのドメインに再デプロイされますが、更新が遅れる場合があります。
-- 「ローカルのVOIEVOXを使う」は、Vercel上で動かしているため使用できません。
+- Vercel上で動かしているため、「ローカルのVOICEVOXを使う」は使用できません。
 - 音声合成は全て[ストリーミング版](https://github.com/ts-klassen/ttsQuestV3Voicevox)で処理されます。これは、合成に時間がかかる際のタイムアウトを防ぐためです。
-- 数秒間隔で合成処理を行うと、ストリーミング版の制限として`429 Too many requests`が返される場合があります。その際は数十秒程度おいて再度試してください。
+- 数秒間隔で合成処理を行うと、ストリーミング版の制限として`429 Too many requests`が返される場合があります。その際は数秒程度おいて再度試してください。
 - ローカルでの実行時と比べ一部異なる場合、コミットのDescriptionにその旨を記します。
 
 ## Reference
