@@ -113,6 +113,9 @@ async function debateButtonClicked() {
         
         // 音声処理
         playVoice(orderInt % 2 !== 0 ? geminiText.assertion : cohereText);
+
+        // 計10回の意見生成(各5回)で終了
+        if (orderInt >= 10) isFinish = true;
     } catch (error){
         console.error(`エラー: ${error}`);
     }
