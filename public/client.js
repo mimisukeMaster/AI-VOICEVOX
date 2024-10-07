@@ -12,13 +12,13 @@ const elements = {};
 Object.keys(ids).forEach(key => elements[key] = document.getElementById(ids[key]));
 
 // テキスト入力
-inputText.addEventListener("input", () => {
+elements.inputText.addEventListener("input", () => {
     const isEmpty = inputText.value.trim() === "";
     elements.askButton.disabled = isEmpty;
 });
 
 // テキストエリアで Ctrl+Enter
-inputText.addEventListener("keydown", (event) => {
+elements.inputText.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.key === "Enter") {
         elements.outputText.innerHTML = "";
         askButtonClicked(inputText.value);
@@ -26,14 +26,14 @@ inputText.addEventListener("keydown", (event) => {
 });
 
 // 質問する! ボタン押下
-askButton.addEventListener("click", () => {
+elements.askButton.addEventListener("click", () => {
     elements.outputText.innerHTML = "";
     askButtonClicked(inputText.value);
 });
 
 if(window.location.hostname !== "localhost"){
-    useLocalApi.disabled = true;
-    useLocalApiText.innerHTML = `<span title='ローカル環境でのみ使用できます'>${useLocalApiText.innerHTML}</span>`;
+    elements.useLocalApi.disabled = true;
+    elements.useLocalApiText.innerHTML = `<span title='ローカル環境でのみ使用できます'>${useLocalApiText.innerHTML}</span>`;
 } 
 
 async function askButtonClicked(input) {
@@ -43,7 +43,7 @@ async function askButtonClicked(input) {
         
         // 回答文生成
         const gemini = await fetchAndParse("/api/gemini", -1, input, "application/json");        
-        outputText.innerText = gemini;
+        elements.outputText.innerText = gemini;
         
         // ローディング表示変更
         toggleLoading(true, "発声準備中");

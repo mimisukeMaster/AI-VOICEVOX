@@ -18,6 +18,7 @@ const ids = {
 const elements = {};
 Object.keys(ids).forEach(key => elements[key] = document.getElementById(ids[key]));
 
+let organizeButtonText = ""; 
 let orderInt = 0;
 let isFinish = false;
 
@@ -67,8 +68,8 @@ elements.debateFinishButton.addEventListener("click", () => {
 });
 
 if(window.location.hostname !== "localhost"){
-    useLocalApi.disabled = true;
-    useLocalApiText.innerHTML = `<span title='ローカル環境でのみ使用できます'>${useLocalApiText.innerHTML}</span>`;
+    elements.useLocalApi.disabled = true;
+    elements.useLocalApiText.innerHTML = `<span title='ローカル環境でのみ使用できます'>${useLocalApiText.innerHTML}</span>`;
 } 
 
 async function organizeButtonClicked(input) {
@@ -81,15 +82,20 @@ async function organizeButtonClicked(input) {
         },
         body: JSON.stringify({ order: orderInt, text: input }),
     });
-    organizedText.innerHTML = await geminiOrganize.text();
+    elements.organizedText.innerHTML = await geminiOrganize.text();
 
-    //　ボタン有効化
-    debateButton.disabled = false;
+    //　ボタン制御
+    organizeButtonText = elements.organizeButton.textContent;
+    elements.organizeButton.textContent = "再生成する";
+    elements.debateButton.disabled = false;
 }
 
 async function debateButtonClicked() {
     
     try{
+        // テキストを戻す
+        elements.organizeButton.textContent = organizeButtonText;
+        
         // ローディング表示
         toggleLoading(true, "考え中");
 
