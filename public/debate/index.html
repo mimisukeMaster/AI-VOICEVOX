@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI討論 - AI同士の対話を楽しもう</title>
+    <title>AI討論 - AI同士のディベートバトル！</title>
     <link rel="icon" href="../images/icon.png" type="image.png">
     <link rel="stylesheet" href="../styles.css">
 </head>
@@ -17,23 +17,21 @@
         </ul>
     </nav>
     <h1>AI討論</h1>
-    <h3>対決相手を選ぶ</h3>
-    <p>
+    <h3>
         <b>ずんだもん VS</b>
     <select id="character" title="デフォルトはずんだもんです">
-        <option value="3">相手を選択してください</option>
+        <option value="3">対戦相手を選択する</option>
         <option value="3">ずんだもん(?)</option>
         <option value="2">四国めたん(女性)</option>
         <option value="8">春日部つむぎ(女性)</option>
         <option value="13">青山龍星(男性)</option>
         <option value="21">剣崎雌雄(男性)</option>
     </select>
-    </p>
-    <p>議題を入力してください
+    </h3>
+    <p>論題を入力してください
     </p>
     
     <p><textarea cols="40" rows="3" class="debate" id="inputText" placeholder="例: 週休3日制はアリかナシか"></textarea></p>
-    <p>について討論</p>
     
     <p><button type="button" id="organizeButton" disabled>1: 論点を整理する</button></p>
     <p id="organizedText"></p>
