@@ -11,7 +11,6 @@ const PORT = 3000;
 const geminiApiKey = process.env.GEMINI_API_KEY;
 const cohereApiKey = process.env.COHERE_API_KEY;
 const voicevoxApiKey = process.env.VOICEVOX_API_KEY;
-const badContentNotice = "不適切なコンテンツを含む回答が生成されてしまいました。議題を変えて再度お試しください。";
 
 const genAI = new GoogleGenerativeAI(geminiApiKey);
 const cohere = new CohereClient({ token: cohereApiKey });
@@ -85,9 +84,6 @@ async function organizeDebate(chatSession) {
         テーマ:${theme}
     `);
     const geminiOrganizeRes = formatResponseText(geminiOrganize.response.text(), false);
-    if (geminiOrganizeRes.includes("A server error has occurred FUNCTION_INVOCATION_FAILED")) {
-        return badContentNotice;
-    }
     const parts = geminiOrganizeRes.split("反対派:");
     pros = parts[0].split("賛成派:")[1];
     cons = parts[1];

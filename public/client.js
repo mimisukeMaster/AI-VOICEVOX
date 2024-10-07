@@ -11,6 +11,8 @@ const ids = {
 const elements = {};
 Object.keys(ids).forEach(key => elements[key] = document.getElementById(ids[key]));
 
+const badContentNotice = "不適切なコンテンツを含む回答が生成されてしまいました。論題を変えて再度お試しください。";
+
 // テキスト入力
 elements.inputText.addEventListener("input", () => {
     const isEmpty = inputText.value.trim() === "";
@@ -42,8 +44,10 @@ async function askButtonClicked(input) {
         toggleLoading(true, "考え中");
         
         // 回答文生成
-        const gemini = await fetchAndParse("/api/gemini", -1, input, "application/json");        
-        elements.outputText.innerText = gemini;
+        const gemini = await fetchAndParse("/api/gemini", -1, input, "application/json");   
+        if (gemini.includes("A server error has occurred FUNCTION_INVOCATION_FAILED")){
+            elements.outputText.innerHTML = badContentNotice;
+        } else elements.outputText.innerText = gemini;
         
         // ローディング表示変更
         toggleLoading(true, "発声準備中");

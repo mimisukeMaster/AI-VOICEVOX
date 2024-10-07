@@ -18,7 +18,9 @@ const ids = {
 const elements = {};
 Object.keys(ids).forEach(key => elements[key] = document.getElementById(ids[key]));
 
-let organizeButtonText = elements.organizeButton.textContent;
+const organizeButtonText = elements.organizeButton.textContent;
+const badContentNotice = "不適切なコンテンツを含む回答が生成されてしまいました。論題を変えて再度お試しください。";
+
 let orderInt = 0;
 let isFinish = false;
 
@@ -82,7 +84,11 @@ async function organizeButtonClicked(input) {
         },
         body: JSON.stringify({ order: orderInt, text: input }),
     });
-    elements.organizedText.innerHTML = await geminiOrganize.text();
+    const geminiOrganizeRes = await geminiOrganize.text();
+    if (geminiOrganizeRes.includes("A server error has occurred FUNCTION_INVOCATION_FAILED")) {
+        elements.organizedText.innerHTML = badContentNotice;
+    } else elements.organizedText.innerHTML = geminiOrganizeRes;
+
     elements.organizeButton.textContent = "再生成する";
 
     // ボタン有効化
