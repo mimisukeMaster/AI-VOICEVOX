@@ -18,7 +18,7 @@ const ids = {
 const elements = {};
 Object.keys(ids).forEach(key => elements[key] = document.getElementById(ids[key]));
 
-let organizeButtonText = ""; 
+let organizeButtonText = elements.organizeButton.textContent;
 let orderInt = 0;
 let isFinish = false;
 
@@ -83,10 +83,9 @@ async function organizeButtonClicked(input) {
         body: JSON.stringify({ order: orderInt, text: input }),
     });
     elements.organizedText.innerHTML = await geminiOrganize.text();
-
-    //　ボタン制御
-    organizeButtonText = elements.organizeButton.textContent;
     elements.organizeButton.textContent = "再生成する";
+
+    // ボタン有効化
     elements.debateButton.disabled = false;
 }
 
@@ -95,7 +94,7 @@ async function debateButtonClicked() {
     try{
         // テキストを戻す
         elements.organizeButton.textContent = organizeButtonText;
-        
+
         // ローディング表示
         toggleLoading(true, "考え中");
 
