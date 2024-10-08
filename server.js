@@ -123,7 +123,7 @@ app.post("/api/gemini", async (req, res) => {
         const geminiQuestionRes = formatResponseText(geminiQuestion.response.text(), false);
         if (geminiQuestionRes.includes("A server error has occurred FUNCTION_INVOCATION_FAILED")) {
             res.send(badContentNotice);
-        } else res.send(geminiOrganizeRes);
+        } else res.send(geminiQuestionRes);
         return;
     }
     

@@ -8,7 +8,7 @@
 [<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&style=flat">](https://open.vscode.dev/mimisukeMaster/AI-VOICEVOX)
 
 
-GeminiやCommandRなどのLLMを使用し、質問に答えたり、LLM同士で対話させることができるWebアプリです。全ての返答はVOICEVOXによりリアルタイムで音声合成され、読み上げられます。
+GeminiやCommandRなどのLLMを使用し、LLM同士で討論させることができたり、質問に答えたりできるWebアプリです。全ての返答はVOICEVOXによりリアルタイムで音声合成され、読み上げられます。
 
 ## Requirements
 `npm`が効く環境で、以下のコマンドを実行して[package.json](/package.json)に記載されたパッケージをインストールしてください。
@@ -37,7 +37,7 @@ AI-VOICEVOX
    ├─ about
    │  └─ index.html
    │
-   ├─ debate
+   ├─ question
    │  │  index.html
    │  └─ client.js
    │ 
@@ -54,7 +54,7 @@ AI-VOICEVOX
 
 **public**: http://localhost:3000 接続時のルートにあたる箇所
 
-**debate**: http://localhost:3000/debate にあたる箇所
+**question**: http://localhost:3000/question にあたる箇所
 
 **about**: http://localhost:3000/about にあたる箇所
 
@@ -76,18 +76,19 @@ npm start
 ```cmd
 Server started on port:3000
 ```
-### AI豆打者
-http://localhost:3000/<br>
-対話形式で質問ができます。質問文をバックエンドに送り、GeminiAPIを呼んだ後、レスポンスをVOICEVOXで読み上げています。ローカルでの音声合成は基本的に[高速版](https://voicevox.su-shiki.com/su-shikiapis/)で処理されます。<br>
+### AI討論
+http://localhost:3000<br>
+Gemini、CommandR の各APIを用いて話し合いをさせます。バックエンドで議題から立場を明確に定義し、各々の主張を出力させています。それをフロントエンドに返し、VOICEVOXで読み上げています。賛成派がGemini、反対派がCommandRの回答となっています。
+
+「対戦相手を選択する」で反対派の声を変えると、より対話らしくなります。終了ボタンで現在話されているターンで終了します。（計10回の発言で強制的に終了します）
+
 「ローカルAPIを使う」にチェックを入れた場合、ローカルのVOICEVOX Engineを利用し[ローカル版](http://localhost:50021/docs)で処理されます。別途、VOICEVOXソフトを起動しておいてください。
 
-### AI討論
- http://localhost:3000/debate<br>
- Gemini、CommandR の各APIを用いて話し合いをさせます。バックエンドで議題から立場を明確に定義し、各々の主張を出力させています。それをフロントエンドに返し、VOICEVOXで読み上げています。
+### AI豆打者
+http://localhost:3000/question<br>
+対話形式で質問ができます。質問文をバックエンドに送り、GeminiAPIを呼んだ後、レスポンスをVOICEVOXで読み上げています。ローカルでの音声合成は基本的に[高速版](https://voicevox.su-shiki.com/su-shikiapis/)で処理されます。<br>
 
-「対戦相手を変える」で片方の声を変えると、より対話っぽくなります。終了ボタンで現在話されているターンで終了します。（推論中を含む）
-
-こちらも、「ローカルAPIを使う」にチェックを入れた場合VOICEVOXソフトを起動してから「討論開始！」ボタンを押してください。
+こちらも、「ローカルAPIを使う」にチェックを入れた場合VOICEVOXソフトを起動してから「質問する！」ボタンを押してください。
 
 ## Demo
 Vercel上でデプロイしており、そちらから仕様を確認できます。

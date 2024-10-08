@@ -3,37 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI豆打者 - 何でもお答えします</title>
-    <link rel="icon" href="images/icon.png" type="image/png">
+    <title>AI討論 - AI同士のディベートバトル！</title>
+    <link rel="icon" href="images/icon.png" type="image.png">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <nav>
         <ul>
-            <li><a class="menu" href=".">AI豆打者</a></li>
-            <li><a class="menu" href="debate">AI討論</a></li>
+            <li><a class="menu" href=".">AI討論</a></li>
+            <li><a class="menu" href="question">AI豆打者</a></li>
             <li><a class="menu" href="about">About me</a></li>
             <li><a class="menu" href="https://github.com/mimisukeMaster/AI-VOICEVOX"><img src="images/github-mark-white.png" width="20px" height="20px"></a></li>
         </ul>
     </nav>
-    <h1>AI<ruby>豆打<rt>ずんだ</rt>者<rt>もん</rt></ruby></h1>
+    <h1>AI討論</h1>
+    <h3>
+        <b>ずんだもん VS</b>
+    <select id="character" title="デフォルトはずんだもんです">
+        <option value="3">対戦相手を選択する</option>
+        <option value="3">ずんだもん(?)</option>
+        <option value="2">四国めたん(女性)</option>
+        <option value="8">春日部つむぎ(女性)</option>
+        <option value="13">青山龍星(男性)</option>
+        <option value="21">剣崎雌雄(男性)</option>
+    </select>
+    </h3>
+    <p>論題を入力してください
+    </p>
     
-    <p>訊きたいことを入力してください</p>
+    <p><textarea cols="40" rows="3" class="debate" id="inputText" placeholder="例: 週休3日制はアリかナシか"></textarea></p>
     
-    <p><textarea class="public" id="inputText" placeholder="例: GeminiとClaude、どっちが優秀？"></textarea></p>
-    
-    <p class="loading"><button type="button" id="askButton" disabled>質問する！</button>
+    <p><button type="button" id="organizeButton" disabled>1: 論点を整理する</button></p>
+    <p id="organizedText"></p>
+
+    <p class="loading"><button type="button" id="debateButton" disabled>2: 討論開始！</button>
+
         <label class="checkbox-container">
             <input type="checkbox" id="useLocalApi">
-            <span title ="VOICEVOXソフトを起動しておく必要があります" id ="useLocalApiText">ローカルのVOICEVOXを使う</span>
+            <span title="VOICEVOXソフトを起動しておく必要があります" id ="useLocalApiText">ローカルのVOICEVOXを使う</span>
         </label>
     </p>
-    <p><span id="loading">あああ</span><span id="dots"></span></p>
-    <p>回答</p>
-    
-    <p id="outputText">
-        <!--このidを指定して回答が出力される-->
+        <p><span id="loading"></span><span id="dots"></span></p>
+    <p>
+        <button type="button" id="debateFinish" disabled>終了する</button>
+        <span id="finishingText"></span><span id="finishing"></span>
     </p>
+    <p id="summary">
+        
+    </p>
+    <p id="outputText">
+        <!--このidを指定して出力される-->
+    </p>
+
     <script src="TtsQuestV3Voicevox.js"></script>
     <script src="client.js"></script>
 </body>
