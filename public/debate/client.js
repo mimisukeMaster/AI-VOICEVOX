@@ -85,7 +85,7 @@ async function organizeButtonClicked(input) {
         body: JSON.stringify({ order: orderInt, text: input }),
     });
     const geminiOrganizeRes = await geminiOrganize.text();
-    if (geminiOrganizeRes.includes("A server error has occurred FUNCTION_INVOCATION_FAILED")) {
+    if (geminiOrganizeRes.includes("A server error has occurred\n\nFUNCTION_INVOCATION_FAILED\n")) {
         elements.organizedText.innerHTML = badContentNotice;
     } else elements.organizedText.innerHTML = geminiOrganizeRes;
 

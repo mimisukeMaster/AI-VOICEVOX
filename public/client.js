@@ -45,7 +45,7 @@ async function askButtonClicked(input) {
         
         // 回答文生成
         const gemini = await fetchAndParse("/api/gemini", -1, input, "application/json");   
-        if (gemini.includes("A server error has occurred FUNCTION_INVOCATION_FAILED")){
+        if (gemini.includes("A server error has occurred\n\nFUNCTION_INVOCATION_FAILED\n")){
             elements.outputText.innerHTML = badContentNotice;
         } else elements.outputText.innerText = gemini;
         
