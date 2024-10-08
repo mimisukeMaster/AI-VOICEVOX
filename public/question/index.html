@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI豆打者 - 何でもお答えします</title>
+    <link rel="icon" href="../images/icon.png" type="image/png">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a class="menu" href="..">AI討論</a></li>
+            <li><a class="menu" href=".">AI豆打者</a></li>
+            <li><a class="menu" href="about">About me</a></li>
+            <li><a class="menu" href="https://github.com/mimisukeMaster/AI-VOICEVOX"><img src="../images/github-mark-white.png" width="20px" height="20px"></a></li>
+        </ul>
+    </nav>
+    <h1>AI<ruby>豆打<rt>ずんだ</rt>者<rt>もん</rt></ruby></h1>
+    
+    <p>訊きたいことを入力してください</p>
+    
+    <p><textarea class="public" id="inputText" placeholder="例: GeminiとClaude、どっちが優秀？"></textarea></p>
+    
+    <p class="loading"><button type="button" id="askButton" disabled>質問する！</button>
+        <label class="checkbox-container">
+            <input type="checkbox" id="useLocalApi">
+            <span title ="VOICEVOXソフトを起動しておく必要があります" id ="useLocalApiText">ローカルのVOICEVOXを使う</span>
+        </label>
+    </p>
+    <p><span id="loading"></span><span id="dots"></span></p>
+    <p>回答</p>
+    
+    <p id="outputText">
+        <!--このidを指定して回答が出力される-->
+    </p>
+    <script src="../TtsQuestV3Voicevox.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>
