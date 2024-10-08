@@ -11,7 +11,7 @@ const ids = {
 const elements = {};
 Object.keys(ids).forEach(key => elements[key] = document.getElementById(ids[key]));
 
-const badContentNotice = "不適切なコンテンツを含む回答が生成されてしまいました。論題を変えて再度お試しください。";
+const badContentNotice = "不適切なコンテンツを含む回答が生成されてしまいました。質問を変えて再度お試しください。";
 
 // テキスト入力
 elements.inputText.addEventListener("input", () => {
