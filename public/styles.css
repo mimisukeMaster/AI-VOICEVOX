@@ -306,6 +306,16 @@ textarea:focus {
     display: inline-block;
 }
 
+#summaryToggle {
+    display: none;
+    cursor: pointer;
+}
+
+#summary {
+    display: none;
+    clear: both;
+}
+
 .links {
     margin-left: 5px;
 }

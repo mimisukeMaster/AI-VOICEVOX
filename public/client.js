@@ -13,7 +13,8 @@ const ids = {
     debateFinishButton: "debateFinish",
     finishingText: "finishingText",
     finishing: "finishing",
-    summary: "summary"
+    summaryToggle: "summaryToggle",
+    summary: "summary",
 };
 const elements = {};
 Object.keys(ids).forEach(key => elements[key] = document.getElementById(ids[key]));
@@ -69,6 +70,11 @@ elements.debateFinishButton.addEventListener("click", () => {
     elements.finishing.style.display = "inline-block";
 });
 
+// 要約文展開 ボタン押下
+elements.summaryToggle.addEventListener("click", () => {
+    toggleDisplay();
+})
+
 if(window.location.hostname !== "localhost"){
     elements.useLocalApi.disabled = true;
     elements.useLocalApiText.innerHTML = `<span title='ローカル環境でのみ使用できます'>${useLocalApiText.innerHTML}</span>`;
@@ -93,6 +99,12 @@ async function organizeButtonClicked(input) {
 
     // ボタン有効化
     elements.debateButton.disabled = false;
+}
+
+// 要約文展開
+function toggleDisplay() {
+    var content = elements.summary.style;
+    content.display = content.display === "none" ? "block" : "none";
 }
 
 async function debateButtonClicked() {
@@ -151,6 +163,7 @@ function showOutput(className, order, text) {
     // 2週目以降ならば要約も表示
     if (order !== 1 && className === "geminiDebate") {
         elements.summary.innerHTML = geminiText.summary;
+        elements.summaryToggle.style.display = "inline-block";
     }
 }
 
@@ -225,6 +238,7 @@ function resetDebate() {
 
     elements.finishingText.innerText = "";
     elements.finishing.style.display = "none";
+    elements.summaryToggle.style.display = "none";
     toggleLoading(false, "");
 
     elements.organizeButton.disabled = false;

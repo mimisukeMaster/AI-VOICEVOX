@@ -18,20 +18,22 @@
     </nav>
     <h1>AI討論</h1>
     <h3>
-        <b>ずんだもん VS</b>
-    <select id="character" title="デフォルトはずんだもんです">
-        <option value="3">対戦相手を選択する</option>
-        <option value="3">ずんだもん(?)</option>
-        <option value="2">四国めたん(女性)</option>
+        <b><ruby>ずんだもん<rt>Gemini</rt></ruby></rt> VS</b>
+    <ruby><select id="character" title="デフォルトは「四国めたん」です">
+        <option value="2">対戦相手を選択する</option>
+        <option value="2">既定: 四国めたん(女性)</option>
         <option value="8">春日部つむぎ(女性)</option>
         <option value="13">青山龍星(男性)</option>
         <option value="21">剣崎雌雄(男性)</option>
+        <option value="3">ずんだもん(?)</option>
     </select>
+    <rt>CommandR</rt>
+    </ruby>
     </h3>
     <p>論題を入力してください
     </p>
     
-    <p><textarea cols="40" rows="3" class="debate" id="inputText" placeholder="例: 週休3日制はアリかナシか"></textarea></p>
+    <p><textarea cols="40" rows="3" class="debate" id="inputText" placeholder="例: iPhoneかAndroidのどちらが使いやすいか"></textarea></p>
     
     <p><button type="button" id="organizeButton" disabled>1: 論点を整理する</button></p>
     <p id="organizedText"></p>
@@ -48,11 +50,12 @@
         <button type="button" id="debateFinish" disabled>終了する</button>
         <span id="finishingText"></span><span id="finishing"></span>
     </p>
+    <p id="summaryToggle"><u>クリックで下に要約文を表示</u></p>
     <p id="summary">
-        
+        <!--ここに討論の要約が出力される-->
     </p>
     <p id="outputText">
-        <!--このidを指定して出力される-->
+        <!--ここに意見が出力される-->
     </p>
 
     <script src="TtsQuestV3Voicevox.js"></script>
