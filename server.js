@@ -105,9 +105,9 @@ async function summarizeDebate(chatSession) {
     上記の賛成派、および反対派の意見・見解を総括したものを、以下の形式に従って回答してください。
 
     賛成派の主張:
-    黒丸の箇条書きで賛成派の主張とその理由を、各項目を200字以内で記入してください。
+    「●」の箇条書きで賛成派の主張とその理由を、書き言葉で各項目を200トークン以内で記入してください。
     反対派の主張:
-    黒丸の箇条書きで反対派の主張とその理由を、各項目を200字以内で記入してください。
+    「●」の箇条書きで反対派の主張とその理由を、書き言葉で各項目を200トークン以内で記入してください。
     `);
     return `これまでの議論のまとめ<br>${formatResponseText(geminiSummarize.response.text(), true)}`;
 
@@ -119,7 +119,7 @@ app.post("/api/gemini", async (req, res) => {
 
     // AI豆打者からの場合
     if(req.body.order === -1) {
-        const geminiQuestion = await chatSession.sendMessage(`${req.body.text}/回答は口語体で、300文字以内にしてください。`);
+        const geminiQuestion = await chatSession.sendMessage(`${req.body.text}/回答は口語体で、語尾は「なのだ」「のだ」を適宜活用し統一して、200トークン以内にしてください。`);
         const geminiQuestionRes = formatResponseText(geminiQuestion.response.text(), false);
         if (geminiQuestionRes.includes("A server error has occurred FUNCTION_INVOCATION_FAILED")) {
             res.send(badContentNotice);
@@ -146,7 +146,9 @@ app.post("/api/gemini", async (req, res) => {
         ${insertSummary}
 
         上記のテーマについて、賛成派と反対派がそれぞれの主張とその理由を議論します。
-        あなたは賛成派の立場に立って、新たな視点を用いて、論理的に主張してください。根拠となるデータや考察の補足をするようにしてください。150トークン以内で、箇条書きや改行、マークダウンを絶対に使わないでください。
+        あなたは賛成派の立場に立って、新たな視点を用いて、語尾は「なのだ」「のだ」を適宜活用し統一して論理的に主張してください。
+        根拠となるデータや考察の補足をするようにしてください。
+        150トークン以内で、箇条書きや改行、マークダウンを絶対に使わないでください。
             
         回答の例
         例1:〇〇です。その理由は△△だからです。
@@ -173,7 +175,7 @@ app.post("/api/cohere", async (req, res) => {
                 賛成派としての見解:${prosAssertion}
 
                 上記のテーマについて、賛成派と反対派がそれぞれの主張とその理由を議論します。
-                あなたは反対派の立場に立って、新たな視点を用いて、口語で論理的に主張してください。根拠となるデータや考察の補足をするようにしてください。150トークンで、**箇条書きや改行、マークダウンを絶対に使わないでください**。
+                あなたは反対派の立場に立って、新たな視点を用いて、話し言葉で、論理的に主張してください。根拠となるデータや考察の補足をするようにしてください。150トークンで、**箇条書きや改行、マークダウンを絶対に使わないでください**。
                 反対派としての見解:「**ここの中身のみを書いてください**」`,
         });
         consAssertion = cohereCons.text;
