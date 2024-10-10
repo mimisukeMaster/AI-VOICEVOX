@@ -21,7 +21,7 @@ npm install
 "@google/generative-ai": "^0.17.1",
 "cohere-ai": "^7.13.0",
 "dotenv": "^16.4.5",
-"express": "^4.19.2,
+"express": "^4.19.2",
 "vercel": "^37.4.2"
 ```
 
