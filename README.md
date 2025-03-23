@@ -5,7 +5,7 @@
 [<img  src="https://img.shields.io/hexpm/l/plug?color=red&logo=apache">](https://www.apache.org/licenses/)<br>
 [<img src="https://img.shields.io/badge/deployed%20to-Vercel-brightgreen?logo=vercel">](https://github.com/mimisukeMaster/AI-VOICEVOX/deployments)
 <img src="https://img.shields.io/github/repo-size/mimisukeMaster/AI-VOICEVOX?logo=gitlfs&color=ff69b4">
-[<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&style=flat">](https://open.vscode.dev/mimisukeMaster/AI-VOICEVOX)
+[<img src="https://img.shields.io/static/v1?label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&style=flat">](https://github.dev/mimisukeMaster/AI-VOICEVOX)
 
 
 GeminiやCommandRなどのLLMを使用し、LLM同士で討論させることができたり、質問に答えたりできるWebアプリです。全ての返答はVOICEVOXによりリアルタイムで音声合成され、読み上げられます。
