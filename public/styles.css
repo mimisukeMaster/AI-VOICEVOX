@@ -1,3 +1,4 @@
+/* Keep custom fonts if desired */
 @font-face {
     font-family: "myfont";
     src: url(./fonts/GenJyuuGothic-Heavy.woff2) format("woff2");
@@ -6,222 +7,51 @@
 @font-face {
     font-family: "myfont";
     src: url(./fonts/GenJyuuGothic-Medium.woff2) format("woff2");
-    font-weight: normal;
+    font-weight: normal; /* Changed to normal */
 }
 
 body {
-    margin: 0;
-    background-color: ghostwhite;
-    font-family: "myfont";
-    overflow-x: hidden;
+    font-family: "myfont", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    /* Use custom font with Bootstrap's stack as fallback */
+    font-weight: normal; /* Ensure normal weight is default */
 }
 
-nav {
-    width: 100%;
-    height: 60px;
-    background-color: lightslategrey;
-    padding-top: 5px;
-    box-sizing: border-box;
-}
-ul {
-    display: flex;
-}
-li{
-    list-style: none;
+h1, h3 {
+    font-weight: bold; /* Keep headings bold if using the bold font */
 }
 
-.menu {
-    display: block;
-    text-decoration: none;
-    color: white;
-    margin-right: 35px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
-h1 {
-    margin-left: 10px;
-    font-weight: bold;
-}
-
-h3 {
-    margin-left: 10px;
-}
+/* Keep specific Ruby text color */
 rt {
-    color: #52781B;
+    color: #52781B; /* Zundamon color */
+    font-weight: normal; /* Ensure rt isn't bold unless intended */
 }
 
-p { 
-    margin-left: 10px;
+/* Adjust debate textarea height slightly if needed */
+.debate-textarea {
+    min-height: 80px; /* Example adjustment */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Softer shadow */
 }
 
-select {
-    font-family: "myfont";
-    border-radius: 5px;
-    color: white;
-    background-color: brown;
-    cursor: pointer;
-    height: 35px;
-}
-
-option {
-    color: white;
-    background-color: brown;
-    cursor: pointer;
-}
-
-.public {
-    width: 90%;
-    box-sizing: border-box;
-    min-height: 170px; 
-    border-radius: 10px;
-    border-width: 3px;
-    padding: 5px;
-    box-shadow: 5px 5px 3px #333333;
-}
-
-.debate {
-    width: 60%;
-    box-sizing: border-box;
-    border-radius: 10px;
-    border-width: 3px;
-    padding: 5px;
-    box-shadow: 5px 5px 3px #333333;
-}
-
-
-textarea:focus {
-    border-color: black;
-    border-width: 3px;
-    box-shadow: 4px 4px 3px #333333;
-}
-
-#askButton:disabled, #organizeButton:disabled, #debateButton:disabled {
-    cursor: not-allowed;
-}
-
-#askButton:disabled:hover, #organizeButton:disabled:hover, #debateButton:disabled:hover {
-    cursor: not-allowed;
-}
-
-#askButton {
-    transition: background-color 0.5s;
-    width: 110px;
-    height: 35px;
-    text-align: center;
-    font-family: "myfont";
-    font-weight: normal;
-    font-size: 16px;
-    background-color: #50A7FF;
-    border-radius: 1px;
-    border-color: dodgerblue;
-    color: white;
-    box-shadow: 1px 1px #333333;
-    white-space: nowrap;
-}
-
-#askButton:hover {
-    transition: background-color 0.2s;
-    background-color: dodgerblue;
-}
-
-#askButton:active {
-    background-color: royalblue;
-    border-color: steelblue;
-}
-
-#organizeButton {
-        transition: background-color 0.5s;
-        width: 145px;
-        height: 35px;
-        text-align: center;
-        font-family: "myfont";
-        font-weight: normal;
-        font-size: 16px;
-        background-color: goldenrod;
-        border-radius: 1px;
-        border-color: darkgoldenrod;
-        color: white;
-        box-shadow: 1px 1px #333333;
-        white-space: nowrap;
-}
-
-#organizeButton:hover {
-    transition: background-color 0.2s;
-    background-color: darkgoldenrod;
-}
-
-#organizeButton:active {
-    background-color: #A67A0B;
-    border-color:darkgreen;
-}
-
-#debateButton {
-    transition: background-color 0.5s;
-    width: 110px;
-    height: 35px;
-    text-align: center;
-    font-family: "myfont";
-    font-weight: normal;
-    font-size: 16px;
-    background-color: mediumseagreen;
-    border-radius: 1px;
-    border-color: forestgreen;
-    color: white;
-    box-shadow: 1px 1px #333333;
-    white-space: nowrap;
-}
-
-#debateButton:hover {
-    transition: background-color 0.2s;
-    background-color: seagreen;
-}
-
-#debateButton:active {
-    background-color: green;
-    border-color: darkgreen;
-}
-
-.checkbox-container {
-    display: inline-flex;
-    align-items: center;
-}
-
-.checkbox-container input {
-        width: 20px;
-        height: 20px; 
-}
-
-.checkbox-container input:checked {
-        accent-color: indianred;
-}
-
-#useLocalApiText:disabled {
-    color: #eee;
-}
-
-.loading {
-    display: flex;
-    align-items: center;
-}
-
+/* Keep loading animations */
 #loading {
     display: none;
-    margin-left: 10px;
-    font-size: 20px;
+    font-size: 1.1rem; /* Slightly larger */
     white-space: nowrap;
 }
 
 #dots {
     display: none;
-    font-size: 20px;
+    font-size: 1.1rem; /* Slightly larger */
     position: relative;
+    margin-left: 2px; /* Small space */
 }
 
 #dots::after {
     content: '...';
     animation: dots 1.2s steps(3, end) infinite;
+    position: absolute; /* Ensure it positions correctly */
+    left: 0;
 }
 
 @keyframes dots {
@@ -236,32 +66,14 @@ textarea:focus {
     }
     80%, 100% {
         content: "...";
-    }  
-}
-
-#debateFinish {
-    font-family: "myfont";
-    font-size: 15px;
-    width: 80px;
-    height: 30px;
-    background-color: paleturquoise;
-    border-radius:30px;
-    border-color: aqua;
-}
-
-#debateFinish:hover {
-    background-color: lightblue;
-    border-color: deepskyblue;
-}
-
-#debateFinish:disabled:hover {
-    cursor: not-allowed;
+    }
 }
 
 #finishing {
     display: none;
-    font-size: 20px;
+    font-size: 1.1rem; /* Slightly larger */
     position: relative;
+    margin-left: 5px; /* Space from text */
 }
 
 #finishing::after {
@@ -270,52 +82,71 @@ textarea:focus {
 }
 
 @keyframes finishing {
-    0%, 15% {
-        content: " / ";
-    }
-    30% {
-        content: " ／ ";
-    }
-    45% {
-        content: " ― ";
-    }
-    60% {
-        content: " ＼ ";
-    }
-    75% {
-        content: " \\ ";
-    }
-    90%, 100% {
-        content: " | ";
-    }
+    0%, 15% { content: " / "; }
+    30% { content: " ／ "; }
+    45% { content: " ― "; }
+    60% { content: " ＼ "; }
+    75% { content: " \\ "; } /* Escaped backslash */
+    90%, 100% { content: " | "; }
 }
 
+/* Keep debate specific styles with Bootstrap-friendly adjustments */
 .geminiDebate::before {
     content: "賛成";
     color: white;
     background-color: hotpink;
-    padding: 0px 2px 0px 2px;
+    padding: 0.1em 0.4em; /* Use em for padding */
     display: inline-block;
+    margin-right: 0.5em; /* Space after badge */
+    border-radius: 0.25rem; /* Slight rounding */
+    font-size: 0.9em; /* Slightly smaller */
+    font-weight: bold;
 }
 
 .cohereDebate::before {
     content: "反対";
     color: white;
     background-color: deepskyblue;
-    padding: 0px 2px 0px 2px;
+    padding: 0.1em 0.4em; /* Use em for padding */
     display: inline-block;
+    margin-right: 0.5em; /* Space after badge */
+    border-radius: 0.25rem; /* Slight rounding */
+    font-size: 0.9em; /* Slightly smaller */
+    font-weight: bold;
 }
 
+/* Style for the organized text box */
+#organizedText:not(:empty) { /* Apply only when not empty */
+     margin-top: 0.5rem;
+     padding: 0.75rem 1rem;
+     background-color: #e9ecef; /* Bootstrap light gray */
+     border: 1px solid #ced4da; /* Bootstrap border color */
+     border-radius: 0.25rem;
+     font-size: 0.95rem;
+}
+
+/* Ensure summary toggle maintains cursor */
 #summaryToggle {
-    display: none;
     cursor: pointer;
+    color: #0d6efd; /* Bootstrap primary blue */
+    text-decoration: underline !important; /* Ensure underline shows */
+}
+#summaryToggle:hover {
+    color: #0a58ca; /* Darker blue on hover */
 }
 
-#summary {
-    display: none;
-    clear: both;
-}
+/* Remove styles replaced by Bootstrap */
+/*
+nav, ul, li, .menu, select, option,
+.public, .debate:focus,
+#askButton, #organizeButton, #debateButton, #debateFinish,
+#askButton:disabled, #organizeButton:disabled, #debateButton:disabled,
+#askButton:hover, #organizeButton:hover, #debateButton:hover, #debateFinish:hover,
+#askButton:active, #organizeButton:active, #debateButton:active,
+.checkbox-container, .checkbox-container input, .checkbox-container input:checked,
+#useLocalApiText:disabled,
+.loading,
+.links
+*/
 
-.links {
-    margin-left: 5px;
-}
+/* --- End of CSS --- */

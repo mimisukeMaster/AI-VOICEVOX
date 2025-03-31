@@ -158,7 +158,7 @@ async function fetchAndParse(url, order, type, returnType) {
 
 // 回答表示用関数
 function showOutput(className, order, text) {
-    elements.outputText.innerHTML += `<br><div class="${className}">${text}</div>`;
+    elements.outputText.innerHTML += `<div class="${className}">${text}</div><br>`;
     
     // 2週目以降ならば要約も表示
     if (order !== 1 && className === "geminiDebate") {

@@ -5,58 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI討論 - AI同士のディベートバトル！</title>
     <link rel="icon" href="images/icon.png" type="image.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a class="menu" href=".">AI討論</a></li>
-            <li><a class="menu" href="question">AI豆打者</a></li>
-            <li><a class="menu" href="about">About me</a></li>
-            <li><a class="menu" href="https://github.com/mimisukeMaster/AI-VOICEVOX"><img src="images/github-mark-white.png" width="20px" height="20px"></a></li>
-        </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href=".">AI討論</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="question">AI豆打者</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about">About me</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                     <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/mimisukeMaster/AI-VOICEVOX" target="_blank" rel="noopener noreferrer">
+                            <img src="images/github-mark-white.png" width="20" height="20" alt="GitHub">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
-    <h1>AI討論</h1>
-    <h3>
-        <b><ruby>ずんだもん<rt>Gemini</rt></ruby></rt> VS</b>
-    <ruby><select id="character" title="デフォルトは「四国めたん」です">
-        <option value="2">対戦相手を選択する</option>
-        <option value="2">既定: 四国めたん(女性)</option>
-        <option value="8">春日部つむぎ(女性)</option>
-        <option value="13">青山龍星(男性)</option>
-        <option value="21">剣崎雌雄(男性)</option>
-    </select>
-    <rt>CommandR</rt>
-    </ruby>
-    </h3>
-    <p>論題を入力してください
-    </p>
-    
-    <p><textarea cols="40" rows="3" class="debate" id="inputText" placeholder="例: iPhoneかAndroidのどちらが使いやすいか"></textarea></p>
-    
-    <p><button type="button" id="organizeButton" disabled>1: 論点を整理する</button></p>
-    <p id="organizedText"></p>
 
-    <p class="loading"><button type="button" id="debateButton" disabled>2: 討論開始！</button>
+    <div class="container mt-4">
+        <h1>AI討論</h1>
+        <h3 class="mb-3">
+             <b><ruby>ずんだもん<rt>Gemini</rt></ruby> VS</b>
+             <ruby>
+                <select class="form-select d-inline-block w-auto align-middle ms-1" id="character" title="デフォルトは「四国めたん」です">
+                    <option value="2">対戦相手を選択する</option>
+                    <option value="2" selected>既定: 四国めたん(女性)</option> <option value="8">春日部つむぎ(女性)</option>
+                    <option value="13">青山龍星(男性)</option>
+                    <option value="21">剣崎雌雄(男性)</option>
+                </select>
+                <rt>CommandR</rt>
+             </ruby>
+        </h3>
 
-        <label class="checkbox-container">
-            <input type="checkbox" id="useLocalApi">
-            <span title="VOICEVOXソフトを起動しておく必要があります" id ="useLocalApiText">ローカルのVOICEVOXを使う</span>
-        </label>
-    </p>
-        <p><span id="loading"></span><span id="dots"></span></p>
-    <p>
-        <button type="button" id="debateFinish" disabled>終了する</button>
-        <span id="finishingText"></span><span id="finishing"></span>
-    </p>
-    <p id="summaryToggle"><u>クリックで下に要約文を表示</u></p>
-    <p id="summary">
-        <!--ここに討論の要約が出力される-->
-    </p>
-    <p id="outputText">
-        <!--ここに意見が出力される-->
-    </p>
+        <div class="mb-3">
+            <label for="inputText" class="form-label">論題を入力してください</label>
+            <textarea class="form-control debate-textarea" id="inputText" rows="3" placeholder="例: iPhoneかAndroidのどちらが使いやすいか"></textarea>
+        </div>
 
+        <div class="mb-3">
+            <button type="button" class="btn btn-warning" id="organizeButton" disabled>1: 論点を整理する</button>
+            <p id="organizedText" class="mt-2 bg-light p-2 rounded border"></p> </div>
+
+        <div class="mb-3 d-flex align-items-center">
+            <button type="button" class="btn btn-success me-3" id="debateButton" disabled>2: 討論開始！</button>
+            <div class="form-check">
+                 <input class="form-check-input" type="checkbox" id="useLocalApi">
+                 <label class="form-check-label" for="useLocalApi" title="VOICEVOXソフトを起動しておく必要があります" id="useLocalApiText">ローカルのVOICEVOXを使う</label>
+            </div>
+        </div>
+
+        <div class="mb-3 d-flex align-items-center">
+             <span id="loading"></span><span id="dots"></span>
+        </div>
+
+        <div class="mb-3 d-flex align-items-center">
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="debateFinish" disabled>終了する</button>
+            <span id="finishingText" class="ms-2"></span><span id="finishing"></span>
+        </div>
+
+        <p id="summaryToggle" class="text-primary" style="cursor: pointer; display: none;"><u>クリックで下に要約文を表示</u></p>
+        <p id="summary" class="bg-light p-3 rounded border" style="display: none;">
+             </p>
+        <hr>
+        <p><strong>討論ログ:</strong></p>
+        <div id="outputText" class="border p-3 rounded mb-4" style="min-height: 100px; background-color: #f8f9fa;">
+             </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="TtsQuestV3Voicevox.js"></script>
     <script src="client.js"></script>
 </body>
