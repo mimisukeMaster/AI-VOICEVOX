@@ -1,4 +1,3 @@
-/* Keep custom fonts if desired */
 @font-face {
     font-family: "myfont";
     src: url(./fonts/GenJyuuGothic-Heavy.woff2) format("woff2");
@@ -7,50 +6,57 @@
 @font-face {
     font-family: "myfont";
     src: url(./fonts/GenJyuuGothic-Medium.woff2) format("woff2");
-    font-weight: normal; /* Changed to normal */
+    font-weight: normal;
 }
 
 body {
     font-family: "myfont", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    /* Use custom font with Bootstrap's stack as fallback */
-    font-weight: normal; /* Ensure normal weight is default */
+    font-weight: normal;
 }
 
 h1, h3 {
-    font-weight: bold; /* Keep headings bold if using the bold font */
+    font-weight: bold;
 }
 
-
-/* Keep specific Ruby text color */
 rt {
-    color: #52781B; /* Zundamon color */
-    font-weight: normal; /* Ensure rt isn't bold unless intended */
+    color: #52781B;
+    font-weight: normal;
 }
 
-/* Adjust debate textarea height slightly if needed */
+.form-select {
+	background-color: #e082ad;
+    color: white;
+}
+
 .debate-textarea {
-    min-height: 80px; /* Example adjustment */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Softer shadow */
+    min-height: 80px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-/* Keep loading animations */
+#organizeButton {
+    color: white;
+    background-color: #f3b706;
+}
+#organizeButton:hover {
+    background-color:#f1a00f;
+}
+
 #loading {
     display: none;
-    font-size: 1.1rem; /* Slightly larger */
+    font-size: 1.1rem;
     white-space: nowrap;
 }
 
 #dots {
     display: none;
-    font-size: 1.1rem; /* Slightly larger */
+    font-size: 1.1rem;
     position: relative;
-    margin-left: 2px; /* Small space */
+    margin-left: 2px;
 }
 
 #dots::after {
     content: '...';
     animation: dots 1.2s steps(3, end) infinite;
-    position: absolute; /* Ensure it positions correctly */
     left: 0;
 }
 
@@ -71,82 +77,59 @@ rt {
 
 #finishing {
     display: none;
-    font-size: 1.1rem; /* Slightly larger */
+    font-size: 1.1rem;
     position: relative;
-    margin-left: 5px; /* Space from text */
+    margin-left: 5px;
 }
 
 #finishing::after {
     content: "";
-    animation: finishing 1s steps(5, end) infinite;
+    animation: finishing 0.3s steps(5, end) infinite;
 }
 
 @keyframes finishing {
-    0%, 15% { content: " / "; }
-    30% { content: " ／ "; }
-    45% { content: " ― "; }
-    60% { content: " ＼ "; }
-    75% { content: " \\ "; } /* Escaped backslash */
-    90%, 100% { content: " | "; }
+    0%, 25% { content: " /"; }
+    50% { content: "－"; }
+    75% { content: " \\"; }
+    100% { content: " |"; }
 }
 
-/* Keep debate specific styles with Bootstrap-friendly adjustments */
 .geminiDebate::before {
     content: "賛成";
     color: white;
     background-color: hotpink;
-    padding: 0.1em 0.4em; /* Use em for padding */
+    padding: 0.1em 0.4em;
     display: inline-block;
-    margin-right: 0.5em; /* Space after badge */
-    border-radius: 0.25rem; /* Slight rounding */
-    font-size: 0.9em; /* Slightly smaller */
-    font-weight: bold;
+    margin-right: 0.5em;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
 }
 
 .cohereDebate::before {
     content: "反対";
     color: white;
     background-color: deepskyblue;
-    padding: 0.1em 0.4em; /* Use em for padding */
+    padding: 0.1em 0.4em;
     display: inline-block;
-    margin-right: 0.5em; /* Space after badge */
-    border-radius: 0.25rem; /* Slight rounding */
-    font-size: 0.9em; /* Slightly smaller */
-    font-weight: bold;
+    margin-right: 0.5em;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
 }
 
-/* Style for the organized text box */
-#organizedText:not(:empty) { /* Apply only when not empty */
-     margin-top: 0.5rem;
-     padding: 0.75rem 1rem;
-     background-color: #e9ecef; /* Bootstrap light gray */
-     border: 1px solid #ced4da; /* Bootstrap border color */
-     border-radius: 0.25rem;
-     font-size: 0.95rem;
+#organizedText:not(:empty) {
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    font-size: 0.95rem;
 }
 
-/* Ensure summary toggle maintains cursor */
 #summaryToggle {
     cursor: pointer;
-    color: #0d6efd; /* Bootstrap primary blue */
-    text-decoration: underline !important; /* Ensure underline shows */
+    color: #0d6efd;
+    text-decoration: underline !important; 
 }
 #summaryToggle:hover {
-    color: #0a58ca; /* Darker blue on hover */
+    color: #0a58ca;
 }
-
-/* Remove styles replaced by Bootstrap */
-/*
-nav, ul, li, .menu, select, option,
-.public, .debate:focus,
-#askButton, #organizeButton, #debateButton, #debateFinish,
-#askButton:disabled, #organizeButton:disabled, #debateButton:disabled,
-#askButton:hover, #organizeButton:hover, #debateButton:hover, #debateFinish:hover,
-#askButton:active, #organizeButton:active, #debateButton:active,
-.checkbox-container, .checkbox-container input, .checkbox-container input:checked,
-#useLocalApiText:disabled,
-.loading,
-.links
-*/
-
-/* --- End of CSS --- */
