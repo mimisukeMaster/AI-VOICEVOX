@@ -84,7 +84,7 @@ Gemini、CommandR の各APIを用いて話し合いをさせます。バック�
 
 「ローカルAPIを使う」にチェックを入れた場合、ローカルのVOICEVOX Engineを利用し[ローカル版](http://localhost:50021/docs)で処理されます。別途、VOICEVOXソフトを起動しておいてください。
 
-### AI豆打者
+### AIずんだもん
 http://localhost:3000/question<br>
 対話形式で質問ができます。質問文をバックエンドに送り、GeminiAPIを呼んだ後、レスポンスをVOICEVOXで読み上げています。ローカルでの音声合成は基本的に[高速版](https://voicevox.su-shiki.com/su-shikiapis/)で処理されます。<br>
 

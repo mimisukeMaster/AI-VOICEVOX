@@ -72,7 +72,7 @@ elements.debateFinishButton.addEventListener("click", () => {
 
 // 要約文展開 ボタン押下
 elements.summaryToggle.addEventListener("click", () => {
-    toggleDisplay();
+    // toggleDisplay();
 })
 
 if(window.location.hostname !== "localhost"){
@@ -81,6 +81,22 @@ if(window.location.hostname !== "localhost"){
 } 
 
 async function organizeButtonClicked(input) {
+    
+    // 要約文のトグルと中身を消す 
+    elements.summaryToggle.style.display = 'none';
+    elements.summary.innerHTML = "";
+
+    // Bootstrap Collapseの状態リセット
+    const collapseElement = elements.summary;
+    if (collapseElement.classList.contains('show')) {
+        const collapseInstance = bootstrap.Collapse.getInstance(collapseElement);
+        if (collapseInstance) {
+            collapseInstance.hide();
+        } else {
+            // フォールバック
+            collapseElement.classList.remove('show');
+        }
+    }
 
     // Geminiに論点整理をさせ表示する
     const geminiOrganize = await fetch("api/gemini", {
@@ -158,7 +174,7 @@ async function fetchAndParse(url, order, type, returnType) {
 
 // 回答表示用関数
 function showOutput(className, order, text) {
-    elements.outputText.innerHTML += `<br><div class="${className}">${text}</div>`;
+    elements.outputText.innerHTML += `<div class="${className}">${text}</div><br>`;
     
     // 2週目以降ならば要約も表示
     if (order !== 1 && className === "geminiDebate") {
@@ -238,7 +254,6 @@ function resetDebate() {
 
     elements.finishingText.innerText = "";
     elements.finishing.style.display = "none";
-    elements.summaryToggle.style.display = "none";
     toggleLoading(false, "");
 
     elements.organizeButton.disabled = false;
