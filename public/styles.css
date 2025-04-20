@@ -23,6 +23,10 @@ rt {
     font-weight: normal;
 }
 
+.small {
+    color: #777;
+}
+
 .form-select {
 	background-color: #e082ad;
     color: white;
