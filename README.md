@@ -1,7 +1,7 @@
 # AI-VOICEVOX
 [<img src="https://img.shields.io/github/stars/mimisukeMaster/AI-VOICEVOX?&logo=github">](https://github.com/mimisukeMaster/AI-VOICEVOX/stargazers)
 [<img src="https://img.shields.io/badge/issues-welcome-green">](https://github.com/mimisukeMaster/AI-VOICEVOX/issues)
-[<img src="https://img.shields.io/badge/PRs-welcome-orange?logo=git">](https://github.com/mimisukeMaster/OsakanaFlock/pulls)
+[<img src="https://img.shields.io/badge/PRs-welcome-orange?logo=git">](https://github.com/mimisukeMaster/AI-VOICEVOX/pulls)
 [<img  src="https://img.shields.io/hexpm/l/plug?color=red&logo=apache">](https://www.apache.org/licenses/)<br>
 [<img src="https://img.shields.io/badge/deployed%20to-Vercel-brightgreen?logo=vercel">](https://github.com/mimisukeMaster/AI-VOICEVOX/deployments)
 <img src="https://img.shields.io/github/repo-size/mimisukeMaster/AI-VOICEVOX?logo=gitlfs&color=ff69b4">
