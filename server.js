@@ -44,7 +44,7 @@ function formatResponseText(responseText, toHTML) {
 
 // Gemini用初期化関数
 function initializeChatSession() {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-001" });
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
     
     return model.startChat({
         generationConfig: {
